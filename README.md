@@ -1,7 +1,6 @@
 # [PROJECT NAME] BY BACON BROS
 
 ### Project 04 Roles:
-
 Project Manager: Veronika D
 <br>
 Dev1, the Tester: Naomi K

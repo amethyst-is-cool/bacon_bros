@@ -16,3 +16,11 @@ INITIAL DD REVIEW
         - Specified purposes for specific graphs, chart.js, and revised dbs
     - Fixed title
     - Considered some comments from a very critical competing group
+
+veronikaD -- 2026-3-29 22:00
+INITIAL DD REVIEW
+* SUMMARY OF PEER REVIEW:
+    - Suggested clarification regarding user_info
+        - clarified purpose and editibility of user_info
+    - Questioned front-end framework
+        - clarified front-end framework

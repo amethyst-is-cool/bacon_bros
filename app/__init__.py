@@ -21,11 +21,11 @@ def homepage():
     return render_template("home.html")
 
 @app.route('/signup', methods=["GET", "POST"])
-def homepage():
+def signup():
     return render_template("signup.html")
 
 @app.route('/editinfo', methods=["GET", "POST"])
-def homepage():
+def editinfo():
     return render_template("edit_info.html")
 
 

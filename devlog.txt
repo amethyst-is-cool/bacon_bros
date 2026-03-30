@@ -1,5 +1,18 @@
-veronikaD -- 2026-03-25
+veronikaD -- 2026-3-25
 Created app, flag, devlog
 
-nkurian -- 2026-03-30
-Revised design doc
+naomiK -- 2026-3-29 21:00
+INITIAL DD REVIEW
+* SUMMARY OF PEER REVIEW:
+    - Recommended expanding on specific db rows for our three non-user dbs (got the rows down from 50+)
+        - Added the new columns and rows
+    - Flaw in site map
+        - Fixed
+    - Questioned task of creating algorithm for designing schedule
+        - Fixed in roles section
+    - API confusion
+        - Added API section
+    - Asked for reasoning behind certain chocies
+        - Specified purposes for specific graphs, chart.js, and revised dbs
+    - Fixed title
+    - Considered some comments from a very critical competing group

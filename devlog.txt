@@ -1,7 +1,7 @@
 veronikaD -- 2026-3-25
 Created app, flag, devlog
 
-naomiK -- 2026-3-29 21:00
+naomiK -- 2026-03-29 21:00
 INITIAL DD REVIEW
 * SUMMARY OF PEER REVIEW:
     - Recommended expanding on specific db rows for our three non-user dbs (got the rows down from 50+)
@@ -17,7 +17,7 @@ INITIAL DD REVIEW
     - Fixed title
     - Considered some comments from a very critical competing group
 
-veronikaD -- 2026-3-29 22:00
+veronikaD -- 2026-03-29 22:00
 INITIAL DD REVIEW
 * SUMMARY OF PEER REVIEW:
     - Suggested clarification regarding user_info

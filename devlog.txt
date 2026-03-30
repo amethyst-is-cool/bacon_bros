@@ -24,3 +24,8 @@ INITIAL DD REVIEW
         - clarified purpose and editibility of user_info
     - Questioned front-end framework
         - clarified front-end framework
+
+naomiK -- 2026-03-30 11:30
+* WORKING ON APP
+    - Got Flask app to run locally
+    - Created temp home template  

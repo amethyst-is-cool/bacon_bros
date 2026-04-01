@@ -29,3 +29,6 @@ naomiK -- 2026-03-30 11:30
 * WORKING ON APP
     - Got Flask app to run locally
     - Created temp home template  
+
+veronikaD -- 2026-03-31 22:00
+    - Updated readme to include install instructions

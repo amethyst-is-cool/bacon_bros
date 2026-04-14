@@ -10,7 +10,7 @@
 
 <html>
   <head>
-    <title>HOME</title>
+    <title>nutrition</title>
     <link rel="stylesheet" href="/static/style.css">
     <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
   </head>
@@ -27,11 +27,39 @@
     <div class = "divider"></div>
 
     <div class = "content">
-      <h1>HOME</h1>
+      <h1>Nutrition</h1>
 
       tables and stuff
 
     </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<canvas id="myRadarChart" width="400" height="400"></canvas>
+<script>
+const data = {
+  labels: {{labels | tojson}},
+  datasets: [{
+    label: 'Food',
+    data: {{values | tojson}},
+    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+    borderColor: 'rgba(54, 162, 235, 1)',
+    borderWidth: 2
+  }]
+};
 
+const config = {
+  type: 'radar',
+  data: data,
+  options: {
+    scales: {
+      r: {
+        beginAtZero: true
+      }
+    }
+  }
+};
+
+const ctx = document.getElementById('myRadarChart').getContext('2d');
+new Chart(ctx, config);
+</script>
   </body>
 </html>

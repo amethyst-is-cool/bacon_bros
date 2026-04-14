@@ -111,8 +111,9 @@ def logout():
     return redirect("/login")
 
 
-
-
+@app.route("/nutrition", methods=["GET", "POST"])
+def chart():
+    return render_template("chart.html", labels = ["test1", "test2", "test3", "test4", "test5"], values = [5, 10, 15, 25, 30])
 
 def fetch(table, criteria, data, params=()):
     db = get_db()

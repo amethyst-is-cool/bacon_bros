@@ -3,6 +3,7 @@ import random
 from flask import Flask, render_template
 from flask import session, request, redirect
 
+
 # Flask
 app = Flask(__name__)
 app.secret_key = 'wegjedfoigshseiudf'

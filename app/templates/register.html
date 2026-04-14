@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <!--
   Bacon Bros
-  Roster: Yu L, Ricky L, Andrew T, Mustafa A
   SoftDev
 
-  Based off: Gato BLog // Ninja Cats
+  Based off: Snorelacks
  -->
 
 
@@ -15,7 +14,7 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/app.css') }}">
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="h-screen overflow-hidden text-white relative">
@@ -26,7 +25,7 @@
 
   <div class="relative z-20 h-full flex flex-col justify-center items-center px-4">
       <div class="bg-black backdrop-blur-xl border border-white/10 p-8 md:p-10 rounded-3xl shadow-2xl w-full max-w-md flex flex-col gap-4">
-        
+
       <div class="text-center">
         <h1 class="text-4xl font-bold tracking-wider">
           <span class="text-blue-400">REGIST</span>RATION
@@ -42,21 +41,21 @@
       {% endif %}
 
       <form action="/register" method="POST" class="flex flex-col gap-3">
-          
+
       <div class="flex flex-col gap-1">
         <label class="text-xs text-blue-300 uppercase ml-1 required">Username</label>
-        <input type="text" 
-          name="username" 
-          placeholder="Choose a Username..." 
+        <input type="text"
+          name="username"
+          placeholder="Choose a Username..."
           class="search-input w-full text-black p-3 rounded-xl"
           required>
       </div>
 
       <div class="flex flex-col gap-1">
         <label class="text-xs text-blue-300 uppercase ml-1 required">Password</label>
-        <input type="password" 
-          name="password" 
-          placeholder="Create Password..." 
+        <input type="password"
+          name="password"
+          placeholder="Create Password..."
           class="search-input w-full text-black p-3 rounded-xl"
           required>
       </div>
@@ -68,15 +67,11 @@
 
       <div class="text-center text-sm pt-4 border-t border-white/10 text-gray-400">
         <p class="mb-4">
-          Already have an account? 
+          Already have an account?
           <a href="/login" class="text-blue-400 font-bold hover:text-white transition-colors">
             Login Here
           </a>
         </p>
-        <a href="/" class="hover:text-white transition-colors flex items-center justify-center gap-2 opacity-70 hover:opacity-100">
-          <i class="fa-solid fa-arrow-left text-xs"></i>
-          Homepage
-        </a>
       </div>
 
     </div>

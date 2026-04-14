@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!--
+  Bacon Bros
+  Roster: Yu L, Ricky L, Andrew T, Mustafa A
+  SoftDev
+
+  Based off: Gato BLog // Ninja Cats
+ -->
+
+<html>
+  <head>
+    <title>Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+    <style>body { font-family: 'Poppins', sans-serif; }</style>
+  </head>
+
+  <body >
+
+    <nav>
+      <div class="">
+        
+        <div class="">
+          <a class="" href="/register">Register</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="">
+      <div class="">
+
+        <h1 class="">Welcome Back</h1>
+        <p class="">Enter your credentials to continue</p>
+
+        {% if error %}
+          <div class="bg-red-50 border border-red-100 text-red-600 text-sm font-semibold rounded-xl px-3 py-3">
+            {{ error | safe }}
+          </div>
+        {% endif %}
+
+        <form method="POST" action="/login" class="">
+
+          <div class="">
+            <input type="text" 
+            name="username" 
+            class=""
+            required>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <input type="password" 
+                name="password" 
+                class=""
+                required>
+          </div>
+
+          
+
+          <input type="submit" name="sub1"
+            value="Log In">
+        </form>
+
+        <p class="">Don't have an account? <a href="/register" class="">Register</a></p>
+      </div>
+    </div>
+
+  </body>
+</html>

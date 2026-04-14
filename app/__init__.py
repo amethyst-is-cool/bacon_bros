@@ -39,6 +39,8 @@ db.close()
 
 @app.route('/', methods=["GET", "POST"])
 def homepage():
+    if "username" not in session:
+        return redirect("/login")
     return render_template("home.html")
 
 

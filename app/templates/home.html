@@ -33,13 +33,38 @@
         <img src="https://images.ctfassets.net/0ls885pa980u/51D7qJpfeUkRsKo2qV28eG/b002c9eb38bd6cb253d3c5be7592705e/Inclusive-Fitness-slider-ID-29875643.jpg" alt="image of fitness workout">
         <form action="/explore" method="POST"><input type="submit" value="EXPLORE"></form>
     </div>
-    
+
     <div>
         <h3>PERSONALIZE YOUR FITNESS PLAN</h3>
         <p>Description of the personalize page and how you can create your own workout plan based off of your meals</p>
         <img src="https://images.ctfassets.net/psi7gc0m4mjv/3iupCMZfasz4PAftfKy3YM/433284f65deed36d7b470e003ceebc03/iStock-475430856-1500wide-min.jpg" alt="image of fitness workout">
         <form action="/personalize" method="POST"><input type="submit" value="PERSONALIZE"></form>
     </div>
-    
+
+    <div>
+      <h3>Search Bar:</a>
+      <input type="text" id="foodSearch" placeholder="Search for foods">
+
+<!--Basically shows the first five food items of the list that contains search bar letters stored in id="foodSearch"-->
+      {% if foodSearch == null || foodSearch == "Search for foods" %}
+
+        <div>
+          <ul>
+            <li><a action="/add-food or whatever man">{{foodthatcontainssearchbarletterlist[0]}}</a></li>
+            <li><a action="/add-food or whatever man">{{foodthatcontainssearchbarletterlist[1]}}</a></li>
+            <li><a action="/add-food or whatever man">{{foodthatcontainssearchbarletterlist[2]}}</a></li>
+            <li><a action="/add-food or whatever man">{{foodthatcontainssearchbarletterlist[3]}}</a></li>
+            <li><a action="/add-food or whatever man">{{foodthatcontainssearchbarletterlist[4]}}</a></li>
+          </ul>
+      </div>
+
+      {% else %}
+
+        <div></div>
+
+      {% endif %}
+
+    </div>
+
   </body>
 </html>

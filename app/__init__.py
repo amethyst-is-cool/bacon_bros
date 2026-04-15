@@ -105,32 +105,45 @@ def profile():
         return redirect("/login")
     user = session["username"]
     food = fetch("users", "username = ?", "pFoods", (session["username"],))[0][0]
-
+    exer = fetch("users", "username = ?", "pExercises", (session["username"],))[0][0]
+    d1 = True
+    d2 = True
 
     if request.method == "POST":
         if "foodEdit" in request.form:
-            return render_template("profile.html", user = user, d1 = False, food = food)
+            return render_template("profile.html", user = user, d1 = False, d2 = d2, food = food, exercises = exer)
         if "foodsSub" in request.form:
             update_userinfo(session["username"], "pFoods", food + request.form["idk"])
             food = fetch("users", "username = ?", "pFoods", (session["username"],))[0][0]
-            return render_template("profile.html", user = user, d1 = True, food = food)
+            return render_template("profile.html", user = user, d1 = True, d2 = d2, food = food, exercises = exer)
 
+        if "exerEdit" in request.form:
+            return render_template("profile.html", user = user, d1 = d1, d2 = False, food = food, exercises = exer)
+        if "exerSub" in request.form:
+            update_userinfo(session["username"], "pExercises", exer + request.form["idk2"])
+            exer = fetch("users", "username = ?", "pExercises", (session["username"],))[0][0]
+            return render_template("profile.html", user = user, d1 = d1, d2 = True, food = food, exercises = exer)
     
-    return render_template("profile.html", user = user, d1 = True, food = food)
+    return render_template("profile.html", user = user, d1 = True, d2 = True, food = food, exercises = exer)
 
-@app.route('/editinfo', methods=["GET", "POST"])
-def editinfo():
+@app.route('/explore', methods=["GET", "POST"])
+def explore():
     if "username" not in session:
         return redirect("/login")
 
-    return render_template("edit_info.html")
+    return render_template("chart.html", labels = ["test1", "test2", "test3", "test4", "test5"], values = [5, 10, 15, 25, 30])
 
-@app.route('/exercise', methods=["GET", "POST"])
-def exercise():
+@app.route('/personalize', methods=["GET", "POST"])
+def personalize():
     if "username" not in session:
         return redirect("/login")
 
     return render_template("exercise.html")
+
+
+
+
+'''
 
 @app.route("/nutrition", methods=["GET", "POST"])
 def chart():
@@ -140,7 +153,7 @@ def chart():
     return render_template("chart.html", labels = ["test1", "test2", "test3", "test4", "test5"], values = [5, 10, 15, 25, 30])
 
 
-
+'''
 
 
 

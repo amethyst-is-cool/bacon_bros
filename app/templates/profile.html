@@ -41,22 +41,22 @@
                 <input type="submit" name="foodsSub">
             {% endif %}
         </form>
-        <p>{{d1}}</p>
+
 
         <h3>Exercise Preferences</h3>
-        {{food}}
+        {{exercises}}
         <form method="POST" action="">
-            {% if d1 %}
-                <button type="submit" name = "foodEdit">Edit</button>
+            {% if d2 %}
+                <button type="submit" name = "exerEdit">Edit</button>
             {% else %}
 
           <!-- Can we get this into a dropdown? -->
-                <p>Enter new foods below:</p>
-                <input type="text" name="idk" required>
-                <input type="submit" name="foodsSub">
+                <p>Enter new exercises below:</p>
+                <input type="text" name="idk2" required> 
+                <input type="submit" name="exerSub">
             {% endif %}
         </form>
-        <p>{{d1}}</p>
+
 
       </div>
     </div>

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <!--
   Veronika Duvanova, Naomi Kurian, Alvin Sze, Andrew Tsai  Bacon Bros
   SoftDev
@@ -9,35 +10,32 @@
 
 <html>
   <head>
-    <title>Profile</title>
+    <title>HOME</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
   </head>
-
-  <body >
-
-    <nav>
-      <div class="">
-        
-        <div class="">
-          <a class="" href="/">Home</a>
-        </div>
-
-      </div>
+  <body>
+    <nav class = "navbar">
+      <form action="/" method="POST"><input type="submit" value="HOME"></form>
+      <form action="/profile" method="POST"><input type="submit" value="PROFILE"></form>
+      <form action="/explore" method="POST"><input type="submit" value="EXPLORE"></form>
+      <form action="/personalize" method="POST"><input type="submit" value="PERSONALIZE"></form>
+      <form action="/logout" method="POST"><input type="submit" value="LOG OUT"></form>
     </nav>
 
+    <h1>PROFILE</h1>
+    
+    <h3>Hello, {{user}}!</h3>
 
 
-    <div class="">
-      <div class="">
-
-        <h1 class="">Hello, {{user}}!</h1>
-
-
-        <h2>Unnegotiable Food Preferences</h2>
+    <h3>Food Preferences</h3>
         {{food}}
         <form method="POST" action="">
             {% if d1 %}
                 <button type="submit" name = "foodEdit">Edit</button>
             {% else %}
+
+          <!-- Can we get this into a dropdown? -->
                 <p>Enter new foods below:</p>
                 <input type="text" name="idk" required>
                 <input type="submit" name="foodsSub">
@@ -45,6 +43,20 @@
         </form>
         <p>{{d1}}</p>
 
+        <h3>Exercise Preferences</h3>
+        {{food}}
+        <form method="POST" action="">
+            {% if d1 %}
+                <button type="submit" name = "foodEdit">Edit</button>
+            {% else %}
+
+          <!-- Can we get this into a dropdown? -->
+                <p>Enter new foods below:</p>
+                <input type="text" name="idk" required>
+                <input type="submit" name="foodsSub">
+            {% endif %}
+        </form>
+        <p>{{d1}}</p>
 
       </div>
     </div>

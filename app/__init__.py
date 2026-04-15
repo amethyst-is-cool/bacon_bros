@@ -27,14 +27,15 @@ c.execute(
     """
     CREATE TABLE IF NOT EXISTS users (
     username TEXT UNIQUE,
-    password TEXT)
+    password TEXT,
+    pFoods TEXT,
+    pExercises TEXT)
     """
 )
 
 
 db.commit()
 db.close()
-
 
 
 @app.route('/', methods=["GET", "POST"])
@@ -67,10 +68,9 @@ def login():
 
 @app.route('/register', methods=["GET", "POST"])
 def register():
-
-
     if "username" in session:
         return redirect("/")
+
     if request.method == "POST" and request.form:
         usernames = [row[0] for row in fetch("users", "TRUE", "username")]
         if request.form["username"] in usernames:
@@ -81,10 +81,12 @@ def register():
             db = sqlite3.connect(DB_FILE)
             c = db.cursor()
             c.execute(
-                "INSERT INTO users VALUES (?, ?)",
+                "INSERT INTO users VALUES (?, ?, ?, ?)",
                 (
                     request.form["username"],
-                    request.form["password"]
+                    request.form["password"],
+                    "",
+                    ""
                 )
             )
             db.commit()
@@ -97,23 +99,61 @@ def register():
 
 
 
+@app.route('/profile', methods=["GET", "POST"])
+def profile():
+    if "username" not in session:
+        return redirect("/login")
+    user = session["username"]
+    food = fetch("users", "username = ?", "pFoods", (session["username"],))[0][0]
 
 
+    if request.method == "POST":
+        if "foodEdit" in request.form:
+            return render_template("profile.html", user = user, d1 = False, food = food)
+        if "foodsSub" in request.form:
+            update_userinfo(session["username"], "pFoods", food + request.form["idk"])
+            food = fetch("users", "username = ?", "pFoods", (session["username"],))[0][0]
+            return render_template("profile.html", user = user, d1 = True, food = food)
 
+    
+    return render_template("profile.html", user = user, d1 = True, food = food)
 
 @app.route('/editinfo', methods=["GET", "POST"])
 def editinfo():
+    if "username" not in session:
+        return redirect("/login")
+
     return render_template("edit_info.html")
+
+@app.route('/exercise', methods=["GET", "POST"])
+def exercise():
+    if "username" not in session:
+        return redirect("/login")
+
+    return render_template("exercise.html")
+
+@app.route("/nutrition", methods=["GET", "POST"])
+def chart():
+    if "username" not in session:
+        return redirect("/login")
+
+    return render_template("chart.html", labels = ["test1", "test2", "test3", "test4", "test5"], values = [5, 10, 15, 25, 30])
+
+
+
+
+
+
+
+
+
+
 
 @app.route("/logout", methods=["GET", "POST"])
 def logout():
     session.clear()
     return redirect("/login")
 
-
-@app.route("/nutrition", methods=["GET", "POST"])
-def chart():
-    return render_template("chart.html", labels = ["test1", "test2", "test3", "test4", "test5"], values = [5, 10, 15, 25, 30])
 
 def fetch(table, criteria, data, params=()):
     db = get_db()
@@ -123,6 +163,13 @@ def fetch(table, criteria, data, params=()):
     data = c.fetchall()
     db.close()
     return data
+
+def update_userinfo(user, kind, info):
+    db = sqlite3.connect(DB_FILE)
+    c = db.cursor()
+    c.execute(f"UPDATE users SET {kind} = ? WHERE username=?", (info, user))
+    db.commit()
+    db.close()
 
 
 # Flask

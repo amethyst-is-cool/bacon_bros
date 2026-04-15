@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<!--
+  Veronika Duvanova, Naomi Kurian, Alvin Sze, Andrew Tsai  Bacon Bros
+  SoftDev
+  P04 - Makers Makin' It
+  2026 - 3 - 30
+  time spent: 1
+ -->
+
+<html>
+  <head>
+    <title>Profile</title>
+  </head>
+
+  <body >
+
+    <nav>
+      <div class="">
+        
+        <div class="">
+          <a class="" href="/">Home</a>
+        </div>
+
+      </div>
+    </nav>
+
+
+
+    <div class="">
+      <div class="">
+
+        <h1 class="">Hello, {{user}}!</h1>
+
+
+        <h2>Unnegotiable Food Preferences</h2>
+        {{food}}
+        <form method="POST" action="">
+            {% if d1 %}
+                <button type="submit" name = "foodEdit">Edit</button>
+            {% else %}
+                <p>Enter new foods below:</p>
+                <input type="text" name="idk" required>
+                <input type="submit" name="foodsSub">
+            {% endif %}
+        </form>
+        <p>{{d1}}</p>
+
+
+      </div>
+    </div>
+
+  </body>
+</html>

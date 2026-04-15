@@ -32,3 +32,12 @@ naomiK -- 2026-03-30 11:30
 
 veronikaD -- 2026-03-31 22:00
     - Updated readme to include install instructions
+
+naomiK -- 2026-04-07 20:00
+* WORKING ON APP
+    - Fixed login and register
+
+naomiK -- 2026-04-14 21:11
+* WORKING ON PROFILE
+    - Added profile html and route
+    - Fixed issue with register/home

@@ -25,7 +25,28 @@
 
     <h1>PROFILE</h1>
     
-    <h3>Hello, {{user}}!</h3>
+    <h2>Hello, {{user}}!</h2>
+
+    <h3>Basic Info</h3>
+
+    <form>
+        <h2>What is your age?</h2>
+        <input type="number" name="age">
+
+        <h2>What is your weight (lbs)?</h2>
+        <input type="number" name="age">
+        
+        <h2>What is your height ()?</h2>
+        <input type="number" name="age">
+        
+        <h2>Estimated weight loss goal: {{est}}</h2>
+
+        <h2>How much weight do you want to lose:</h2>
+
+        {% if d %}
+                <button type="submit" name = "infoEdit">Edit</button>
+        {% else %}
+    </form>
 
 
     <h3>Food Preferences</h3>
@@ -56,6 +77,8 @@
                 <input type="submit" name="exerSub">
             {% endif %}
         </form>
+
+
 
 
       </div>

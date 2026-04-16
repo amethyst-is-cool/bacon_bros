@@ -46,7 +46,8 @@ def searchFood(food):
     data = sqlite3.connect('static/food.db')
     cursor = data.cursor()
 
-    cursor.execute("SELECT * FROM food WHERE name = ?", (food, ))
-    return cursor.fetchone()
-
-print(searchFood("cream cheese fat free"))
+    cursor.execute("SELECT * FROM food WHERE name LIKE ?", ('%'+food+'%', ))
+    x = cursor.fetchall()
+    if len(x)>5:
+        return x[0:5]
+    return x

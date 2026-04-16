@@ -16,12 +16,15 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
   </head>
   <body>
-    <nav class = "navbar">
-      <form action="/" method="POST"><input type="submit" value="HOME"></form>
-      <form action="/profile" method="POST"><input type="submit" value="PROFILE"></form>
-      <form action="/explore" method="POST"><input type="submit" value="EXPLORE"></form>
-      <form action="/personalize" method="POST"><input type="submit" value="PERSONALIZE"></form>
-      <form action="/logout" method="POST"><input type="submit" value="LOG OUT"></form>
+    <nav class = "navbar navbar=expand-lg navbar-light bg-dark">
+      <a class="navbar-brand" href="#">
+        <img src="/static/favicon.ico" width="30" height="30" class="d-inline-block align-top" alt="favicon">
+        Lettuce Relax</a>
+      <form class="form-inline" action="/" method="POST"><input class="form-control mr-sm-2" type="submit" value="HOME"></form>
+      <form class="form-inline" action="/profile" method="POST"><input class="form-control mr-sm-2" type="submit" value="PROFILE"></form>
+      <form class="form-inline" action="/explore" method="POST"><input class="form-control mr-sm-2" type="submit" value="EXPLORE"></form>
+      <form class="form-inline" action="/personalize" method="POST"><input class="form-control mr-sm-2" type="submit" value="PERSONALIZE"></form>
+      <form class="form-inline" action="/logout" method="POST"><input class="form-control mr-sm-2" type="submit" value="LOG OUT"></form>
     </nav>
 
     <h1 class="fs-1 fw-bold">HOME</h1>

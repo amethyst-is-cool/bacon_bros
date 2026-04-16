@@ -138,7 +138,11 @@ def personalize():
     if "username" not in session:
         return redirect("/login")
 
-    return render_template("exercise.html")
+    user = session["username"]
+    food = fetch("users", "username = ?", "pFoods", (session["username"],))[0][0]
+    exer = fetch("users", "username = ?", "pExercises", (session["username"],))[0][0]
+    
+    return render_template("exercise.html", user=user, food=food, exercise=exer)
 
 
 

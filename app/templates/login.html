@@ -14,25 +14,25 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <style>body { font-family: 'Poppins', sans-serif; }</style>
   </head>
 
-  <body >
+  <body class="h-screen overflow-hidden text-white relative">
 
-    <nav>
-      <div class="">
-        
-        <div class="">
-          <a class="" href="/register">Register</a>
-        </div>
+  <div class="absolute inset-0 z-0">
+    <div class="absolute inset-0 bg-black/60 z-10"></div>
+  </div>
+
+  <div class="relative z-20 h-full flex flex-col justify-center items-center px-4">
+      <div class="bg-black backdrop-blur-xl border border-white/10 p-8 md:p-10 rounded-3xl shadow-2xl w-full max-w-md flex flex-col gap-4">
+
+      <div class="text-center">
+        <h1 class="text-4xl font-bold tracking-wider">
+          <span class="text-blue-400">LOG</span>IN
+        </h1>
+        <p class="text-blue-200/60 mt-2 text-xs uppercase tracking-widest">For Existing Users</p>
       </div>
-    </nav>
-
-    <div class="">
-      <div class="">
-
-        <h1 class="">Welcome Back</h1>
-        <p class="">Enter your credentials to continue</p>
 
         {% if error %}
           <div class="bg-red-50 border border-red-100 text-red-600 text-sm font-semibold rounded-xl px-3 py-3">
@@ -40,31 +40,43 @@
           </div>
         {% endif %}
 
-        <form method="POST" action="/login" class="">
+     <form action="/login" method="POST" class="flex flex-col gap-3">
 
-          <div class="">
-            <input type="text" 
-            name="username" 
-            class=""
-            required>
-          </div>
-
-          <div class="flex flex-col gap-1">
-            <input type="password" 
-                name="password" 
-                class=""
-                required>
-          </div>
-
-          
-
-          <input type="submit" name="sub1"
-            value="Log In">
-        </form>
-
-        <p class="">Don't have an account? <a href="/register" class="">Register</a></p>
+      <div class="flex flex-col gap-1">
+        <label class="text-xs text-blue-300 uppercase ml-1 required">Username</label>
+        <input type="text"
+          name="username"
+          placeholder="Enter your username..."
+          class="search-input w-full text-black p-3 rounded-xl"
+          required>
       </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-xs text-blue-300 uppercase ml-1 required">Password</label>
+        <input type="password"
+          name="password"
+          placeholder="Enter your password..."
+          class="search-input w-full text-black p-3 rounded-xl"
+          required>
+      </div>
+
+        <button type="submit" class="mt-2 w-full btn-primary py-3 rounded-xl text-lg tracking-widest">
+            Log In
+        </button>
+      </form>
+
+      <div class="text-center text-sm pt-4 border-t border-white/10 text-gray-400">
+        <p class="mb-4">
+            Don't have an account?'
+          <a href="/register" class="text-blue-400 font-bold hover:text-white transition-colors">
+            Register
+          </a>
+        </p>
+      </div>
+
     </div>
+
+  </div>
 
   </body>
 </html>

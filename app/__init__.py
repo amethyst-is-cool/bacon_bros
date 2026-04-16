@@ -42,7 +42,7 @@ db.close()
 def homepage():
     if "username" not in session:
         return redirect("/login")
-    return render_template("home.html")
+    return render_template("home.html", food_search = None)
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -157,9 +157,11 @@ def chart():
 
 
 
-
-
-
+@app.route("/results", methods=["GET","POST"])
+def results():
+    if "username" not in session:
+        return redirect("/login")
+    return render_template("results.html", query = request.args['query'], foods = data.searchFoods(request.args['query']))
 
 
 @app.route("/logout", methods=["GET", "POST"])

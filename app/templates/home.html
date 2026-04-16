@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<!--
+  Veronika Duvanova, Naomi Kurian, Alvin Sze, Andrew Tsai  Bacon Bros
+  SoftDev
+  P04 - Makers Makin' It
+  2026 - 3 - 30
+  time spent: 1
+ -->
+
+<html>
+  <head>
+    <title>HOME</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  </head>
+  <body>
+    <nav class = "navbar navbar=expand-lg navbar-light bg-dark">
+      <a class="navbar-brand" href="#">
+        <img src="/static/favicon.ico" width="30" height="30" class="d-inline-block align-top" alt="favicon">
+        Lettuce Relax</a>
+      <form class="form-inline" action="/" method="POST"><input class="form-control mr-sm-2" type="submit" value="HOME"></form>
+      <form class="form-inline" action="/profile" method="POST"><input class="form-control mr-sm-2" type="submit" value="PROFILE"></form>
+      <form class="form-inline" action="/explore" method="POST"><input class="form-control mr-sm-2" type="submit" value="EXPLORE"></form>
+      <form class="form-inline" action="/personalize" method="POST"><input class="form-control mr-sm-2" type="submit" value="PERSONALIZE"></form>
+      <form class="form-inline" action="/logout" method="POST"><input class="form-control mr-sm-2" type="submit" value="LOG OUT"></form>
+    </nav>
+
+    <h1 class="fs-1 fw-bold">HOME</h1>
+
+    <p>Website overview paragraph insert here. Website overview paragraph insert here. Website overview paragraph insert here. Website overview paragraph insert here. Website overview paragraph insert here. </p>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-6">
+          <div class="vstack gap-3 col-md-4 mx-auto">
+            <h3 class="fs-3 fw-bold">EXPLORE A NEW LIFESTYLE</h3>
+            <p class="fs-6 fw-normal">Description of the explore page and how you can compare different exercises to one another</p>
+            <form action="/explore" method="POST"><input type="submit" value="EXPLORE"></form>
+          </div>
+        </div>
+        <div class="col">
+          <img class="img-thumbnail img-fluid" src="https://images.ctfassets.net/0ls885pa980u/51D7qJpfeUkRsKo2qV28eG/b002c9eb38bd6cb253d3c5be7592705e/Inclusive-Fitness-slider-ID-29875643.jpg" alt="image of fitness workout">
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <img class="img-thumbnail img-fluid" src="https://images.ctfassets.net/psi7gc0m4mjv/3iupCMZfasz4PAftfKy3YM/433284f65deed36d7b470e003ceebc03/iStock-475430856-1500wide-min.jpg" alt="image of fitness workout">
+        </div>
+        <div class="col-6">
+          <div class="vstack gap-3 col-md-4 mx-auto">
+            <h3 class="fs-3 fw-bold">PERSONALIZE YOUR FITNESS PLAN</h3>
+            <p class="fs-6 fw-normal">Description of the personalize page and how you can create your own workout plan based off of your meals</p>
+            <form action="/personalize" method="POST"><input type="submit" value="PERSONALIZE"></form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div>
+      <h3>Search Bar:</a>
+      <input type="text" id="foodSearch" placeholder="Search for foods">
+
+<!--Basically shows the first five food items of the list that contains search bar letters stored in id="foodSearch"-->
+
+
+    </div>
+
+  </body>
+</html>

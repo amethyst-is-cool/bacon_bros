@@ -41,3 +41,8 @@ naomiK -- 2026-04-14 21:11
 * WORKING ON PROFILE
     - Added profile html and route
     - Fixed issue with register/home
+
+alvinS -- 2026-04-15 11:30
+* WORKING ON DATABASE
+    - Added dataset into Sqlite3 db
+    - Started search functions to return database data

@@ -30,7 +30,7 @@
     <h3>Basic Info</h3>
 
     <form>
-        <h2>What is your age?</h2>
+        <h3>What is your age?</h3>
         {{age}}
         
         {% if not d %}
@@ -38,7 +38,7 @@
         {% endif %}
 
 
-        <h2>What is your weight (lbs)?</h2>
+        <h3>What is your weight (lbs)?</h3>
         {{weight}} lbs
 
         {% if not d %}
@@ -47,7 +47,7 @@
 
 
 
-        <h2>What is your height (in)?</h2>
+        <h3>What is your height (in)?</h3>
         {{height}}
 
         {% if not d %}
@@ -60,9 +60,9 @@
         {%endif%}
       
         
-        <h2>Estimated weight loss goal: {{est}}</h2>
+        <h3>Estimated weight loss goal: {{est}}</h3>
 
-        <h2>How much weight do you want to lose:</h2>
+        <h3>How much weight do you want to lose:</h3>
 
         {% if d %}
         <button type="submit" name = "infoEdit">Edit</button>

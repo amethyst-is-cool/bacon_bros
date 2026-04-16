@@ -128,26 +128,26 @@ def profile():
 
     if request.method == "POST":
         if "foodEdit" in request.form:
-            return render_template("profile.html", user = user, d=d, d1 = False, d2 = d2, food = food, exercises = exer, age = age, height = height, weight = weight)
+            return render_template("profile.html", user = user, d=d, d1 = False, d2 = d2, food = food, exercises = exer, age = age, height = height, weight = weight, est = 0)
         if "foodsSub" in request.form:
             update_userinfo(session["username"], "pFoods", food + request.form["idk"])
             food = fetch("users", "username = ?", "pFoods", (session["username"],))[0][0]
-            return render_template("profile.html", user = user, d=d, d1 = True, d2 = d2, food = food, exercises = exer, age = age, height = height, weight = weight)
+            return render_template("profile.html", user = user, d=d, d1 = True, d2 = d2, food = food, exercises = exer, age = age, height = height, weight = weight, est = 0)
 
         if "exerEdit" in request.form:
-            return render_template("profile.html", user = user, d= d, d1 = d1, d2 = False, food = food, exercises = exer, age = age, height = height, weight = weight)
+            return render_template("profile.html", user = user, d= d, d1 = d1, d2 = False, food = food, exercises = exer, age = age, height = height, weight = weight, est = 0)
         if "exerSub" in request.form:
             update_userinfo(session["username"], "pExercises", exer + request.form["idk2"])
             exer = fetch("users", "username = ?", "pExercises", (session["username"],))[0][0]
-            return render_template("profile.html", user = user, d=d, d1 = d1, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight)
+            return render_template("profile.html", user = user, d=d, d1 = d1, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight, est = 0)
 
         if "infoEdit" in request.form:
-            return render_template("profile.html", user = user, d= False, d1 = d1, d2 = d2, food = food, exercises = exer, age = age, height = height, weight = weight)
+            return render_template("profile.html", user = user, d= False, d1 = d1, d2 = d2, food = food, exercises = exer, age = age, height = height, weight = weight, est = 0)
 
         
         
 
-    return render_template("profile.html", user = user, d=d, d1 = True, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight)
+    return render_template("profile.html", user = user, d=d, d1 = True, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight, est = 0)
 
 
 

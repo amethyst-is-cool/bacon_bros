@@ -31,22 +31,49 @@
 
     <form>
         <h2>What is your age?</h2>
+        {{age}}
+        
+        {% if not d %}
         <input type="number" name="age">
+        {% endif %}
+
 
         <h2>What is your weight (lbs)?</h2>
-        <input type="number" name="age">
-        
-        <h2>What is your height ()?</h2>
-        <input type="number" name="age">
+        {{weight}} lbs
+
+        {% if not d %}
+        <input type="number" name="weight">
+        {%endif%}        
+
+
+
+        <h2>What is your height (in)?</h2>
+        {{height}}
+
+        {% if not d %}
+        <input type="number" name="height">
+        {%endif%}
+
+
+        {%if not d%}
+        <button type="submit" name = "newInfo">Submit</button>
+        {%endif%}
+      
         
         <h2>Estimated weight loss goal: {{est}}</h2>
 
         <h2>How much weight do you want to lose:</h2>
 
         {% if d %}
-                <button type="submit" name = "infoEdit">Edit</button>
+        <button type="submit" name = "infoEdit">Edit</button>
         {% else %}
+
+
+
     </form>
+
+
+
 
 
     <h3>Food Preferences</h3>
@@ -59,7 +86,7 @@
           <!-- Can we get this into a dropdown? -->
                 <p>Enter new foods below:</p>
                 <input type="text" name="idk" required>
-                <input type="submit" name="foodsSub">
+                <input type="submit" name="foodsSub" value="Submit">
             {% endif %}
         </form>
 
@@ -74,7 +101,7 @@
           <!-- Can we get this into a dropdown? -->
                 <p>Enter new exercises below:</p>
                 <input type="text" name="idk2" required> 
-                <input type="submit" name="exerSub">
+                <input type="submit" name="exerSub" value="Submit">
             {% endif %}
         </form>
 

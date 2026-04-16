@@ -29,7 +29,10 @@ c.execute(
     username TEXT UNIQUE,
     password TEXT,
     pFoods TEXT,
-    pExercises TEXT)
+    pExercises TEXT,
+    age INT,
+    weight INT,
+    height INT)
     """
 )
 
@@ -42,7 +45,7 @@ db.close()
 def homepage():
     if "username" not in session:
         return redirect("/login")
-    return render_template("home.html")
+    return render_template("home.html", food_search = None)
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -81,12 +84,15 @@ def register():
             db = sqlite3.connect(DB_FILE)
             c = db.cursor()
             c.execute(
-                "INSERT INTO users VALUES (?, ?, ?, ?)",
+                "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?)",
                 (
                     request.form["username"],
                     request.form["password"],
                     "",
-                    ""
+                    "",
+                    0,
+                    0,
+                    0
                 )
             )
             db.commit()
@@ -106,25 +112,48 @@ def profile():
     user = session["username"]
     food = fetch("users", "username = ?", "pFoods", (session["username"],))[0][0]
     exer = fetch("users", "username = ?", "pExercises", (session["username"],))[0][0]
+    age = fetch("users", "username = ?", "age", (session["username"],))[0][0]
+    height = fetch("users", "username = ?", "height", (session["username"],))[0][0]
+    age = fetch("users", "username = ?", "age", (session["username"],))[0][0]
+    weight = fetch("users", "username = ?", "weight", (session["username"],))[0][0]
+
+    if height != 0 and age != 0 and weight != 0:
+        haveInfo = True
+    else:
+        haveInfo = False
+    
+    d = True
     d1 = True
     d2 = True
 
     if request.method == "POST":
         if "foodEdit" in request.form:
-            return render_template("profile.html", user = user, d1 = False, d2 = d2, food = food, exercises = exer)
+            return render_template("profile.html", user = user, d=d, d1 = False, d2 = d2, food = food, exercises = exer, age = age, height = height, weight = weight)
         if "foodsSub" in request.form:
             update_userinfo(session["username"], "pFoods", food + request.form["idk"])
             food = fetch("users", "username = ?", "pFoods", (session["username"],))[0][0]
-            return render_template("profile.html", user = user, d1 = True, d2 = d2, food = food, exercises = exer)
+            return render_template("profile.html", user = user, d=d, d1 = True, d2 = d2, food = food, exercises = exer, age = age, height = height, weight = weight)
 
         if "exerEdit" in request.form:
-            return render_template("profile.html", user = user, d1 = d1, d2 = False, food = food, exercises = exer)
+            return render_template("profile.html", user = user, d= d, d1 = d1, d2 = False, food = food, exercises = exer, age = age, height = height, weight = weight)
         if "exerSub" in request.form:
             update_userinfo(session["username"], "pExercises", exer + request.form["idk2"])
             exer = fetch("users", "username = ?", "pExercises", (session["username"],))[0][0]
-            return render_template("profile.html", user = user, d1 = d1, d2 = True, food = food, exercises = exer)
+            return render_template("profile.html", user = user, d=d, d1 = d1, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight)
 
-    return render_template("profile.html", user = user, d1 = True, d2 = True, food = food, exercises = exer)
+        if "infoEdit" in request.form:
+            return render_template("profile.html", user = user, d= False, d1 = d1, d2 = d2, food = food, exercises = exer, age = age, height = height, weight = weight)
+
+        
+        
+
+    return render_template("profile.html", user = user, d=d, d1 = True, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight)
+
+
+
+
+
+
 
 @app.route('/explore', methods=["GET", "POST"])
 def explore():
@@ -157,9 +186,11 @@ def chart():
 
 
 
-
-
-
+@app.route("/results", methods=["GET","POST"])
+def results():
+    if "username" not in session:
+        return redirect("/login")
+    return render_template("results.html", query = request.args['query'], foods = data.searchFoods(request.args['query']))
 
 
 @app.route("/logout", methods=["GET", "POST"])

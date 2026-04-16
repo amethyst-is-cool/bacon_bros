@@ -123,7 +123,7 @@ def profile():
             update_userinfo(session["username"], "pExercises", exer + request.form["idk2"])
             exer = fetch("users", "username = ?", "pExercises", (session["username"],))[0][0]
             return render_template("profile.html", user = user, d1 = d1, d2 = True, food = food, exercises = exer)
-    
+
     return render_template("profile.html", user = user, d1 = True, d2 = True, food = food, exercises = exer)
 
 @app.route('/explore', methods=["GET", "POST"])
@@ -141,23 +141,19 @@ def personalize():
     user = session["username"]
     food = fetch("users", "username = ?", "pFoods", (session["username"],))[0][0]
     exer = fetch("users", "username = ?", "pExercises", (session["username"],))[0][0]
-    
+
     return render_template("exercise.html", user=user, food=food, exercise=exer)
 
 
 
 
-'''
 
-@app.route("/nutrition", methods=["GET", "POST"])
+@app.route("/explore", methods=["GET", "POST"])
 def chart():
     if "username" not in session:
         return redirect("/login")
 
     return render_template("chart.html", labels = ["test1", "test2", "test3", "test4", "test5"], values = [5, 10, 15, 25, 30])
-
-
-'''
 
 
 

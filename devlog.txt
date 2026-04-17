@@ -67,3 +67,9 @@ HOME STRETCH CHECKLIST:
 * finalize profile page + backend :: Naomi
 * produce bootstrap CSS: Veronika
 ====================================
+
+veronikaD -- 2026-04-16 22:00
+* WORKING ON PERSONALIZATION
+    - completed bootstrap for both login and signup, pages complete
+    - created preferred food SQLite table for easier user information editing
+    - completed the process of retrieving and removing preferred foods for personalization page

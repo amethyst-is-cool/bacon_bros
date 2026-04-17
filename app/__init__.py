@@ -2,7 +2,7 @@ import sqlite3
 import random
 from flask import Flask, render_template
 from flask import session, request, redirect
-
+import data
 
 # Flask
 app = Flask(__name__)
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS user_foods (
 
 #temporary food preferences for user with username a
 c.execute("""
-INSERT INTO user_foods 
+INSERT INTO user_foods
 (username, name, calories, fat, sugar, protein, fiber, cholesterol)
 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
 """, ('a', 'Apple', 95, 0.3, 19, 0.5, 4.4, 0))
@@ -141,7 +141,7 @@ def profile():
         haveInfo = True
     else:
         haveInfo = False
-    
+
     d = True
     d1 = True
     d2 = True
@@ -164,8 +164,8 @@ def profile():
         if "infoEdit" in request.form:
             return render_template("profile.html", user = user, d= False, d1 = d1, d2 = d2, food = food, exercises = exer, age = age, height = height, weight = weight, est = 0)
 
-        
-        
+
+
 
     return render_template("profile.html", user = user, d=d, d1 = True, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight, est = 0)
 
@@ -231,7 +231,7 @@ def personalize():
 def results():
     if "username" not in session:
         return redirect("/login")
-    return render_template("results.html", query = request.args['query'], foods = data.searchFoods(request.args['query']))
+    return render_template("results.html", query = request.args['search_query'], foods = data.searchFood(request.args['search_query']))
 
 
 

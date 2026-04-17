@@ -11,8 +11,9 @@
 <html>
   <head>
     <title>HOME</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/css/style.css">
     <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <script src="/static/js/profile.js" defer></script>
   </head>
   <body>
     <nav class = "navbar">
@@ -28,6 +29,12 @@
     <h2>Hello, {{user}}!</h2>
 
     <h3>Basic Info</h3>
+
+    <script>
+      if (window.history.replaceState) {
+          window.history.replaceState(null, null, window.location.href);
+      }
+    </script>
 
     <form method="POST">
         <h3>What is your age?</h3>
@@ -57,41 +64,38 @@
         <br><br>
 
         {%if not d%}
-        <button type="submit" name = "newInfo">Submit</button>
-        {%endif%}
-      
-        
-        <h3>Estimated weight loss goal: {{est}}</h3>
-
-        <h3>How much weight do you want to lose:</h3>
-
-        {% if d %}
+        <button type="submit" name ="newInfo">Submit</button>
+        {%else%}
         <button type="submit" name = "infoEdit">Edit</button>
         {% endif %}
-
-        {{d}}
+      
 
 
     </form>
 
 
-    <br><br>
-    <br><br>
+    <br><br><br><br>
 
 
 
-    <h3>Food Preferences</h3>
+    <h3>Today's Meal Plan</h3>
         {{food}}
-        <form method="POST" action="">
-            {% if d1 %}
-                <button type="submit" name = "foodEdit">Edit</button>
-            {% else %}
 
-          <!-- Can we get this into a dropdown? -->
-                <p>Enter new foods below:</p>
-                <input type="text" name="idk" required>
-                <input type="submit" name="foodsSub" value="Submit">
-            {% endif %}
+          <button onclick="drop()" id = "foodEdit">Edit</button>
+          <br>
+          <div class="dropdown1">
+            <div id="dropd" class="menu">
+              <div class="searchBar" id = 's'>
+                <input type="text" placeholder="Search..." id="search" onkeyup="filter()">
+              </div>
+                <div id = "options" class="opt">
+                  {% for f in foods %}
+                  <p>{{f}}</p>
+                  {% endfor %}
+                </div>
+            </div>
+          </div>
+
         </form>
 
 
@@ -108,6 +112,9 @@
                 <input type="submit" name="exerSub" value="Submit">
             {% endif %}
         </form>
+
+
+      <br><br><br><br>
 
       <div>
         <h3>Want to See Your Personalized Workout Plan?</h3>

@@ -1,0 +1,29 @@
+
+  
+.dropdown1 {
+    position: relative;
+    display: inline-block;
+}
+  
+.menu {
+    position: absolute;
+    background-color: #f6f6f6;
+    border: solid #ddd;
+    z-index: 1;
+}
+
+.searchBar, .opt{
+    display: none;
+
+}
+
+.opt{
+    max-height: 200px;
+    overflow-y: auto; 
+    overflow-x: hidden;
+}
+
+
+.menu p:hover {background-color: #969cb0}
+  
+.display {display:block;}

@@ -137,37 +137,39 @@ def profile():
     age = fetch("users", "username = ?", "age", (session["username"],))[0][0]
     weight = fetch("users", "username = ?", "weight", (session["username"],))[0][0]
 
+    foods = getFoodsList(True, "name")
+
+    foodsL = []
+    for i in range(1, len(foods)):
+        foodsL += [foods[i][0]]
+
     if height != 0 and age != 0 and weight != 0:
         haveInfo = True
     else:
         haveInfo = False
 
     d = True
-    d1 = True
     d2 = True
 
     if request.method == "POST":
-        if "foodEdit" in request.form:
-            return render_template("profile.html", user = user, d=d, d1 = False, d2 = d2, food = food, exercises = exer, age = age, height = height, weight = weight, est = 0)
-        if "foodsSub" in request.form:
-            update_userinfo(session["username"], "pFoods", food + request.form["idk"])
-            food = fetch("users", "username = ?", "pFoods", (session["username"],))[0][0]
-            return render_template("profile.html", user = user, d=d, d1 = True, d2 = d2, food = food, exercises = exer, age = age, height = height, weight = weight, est = 0)
-
+        
         if "exerEdit" in request.form:
-            return render_template("profile.html", user = user, d= d, d1 = d1, d2 = False, food = food, exercises = exer, age = age, height = height, weight = weight, est = 0)
+            return render_template("profile.html", user = user, d= d, d2 = False, food = food, exercises = exer, age = age, height = height, weight = weight, foods = foodsL)
         if "exerSub" in request.form:
             update_userinfo(session["username"], "pExercises", exer + request.form["idk2"])
             exer = fetch("users", "username = ?", "pExercises", (session["username"],))[0][0]
-            return render_template("profile.html", user = user, d=d, d1 = d1, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight, est = 0)
+            return render_template("profile.html", user = user, d=d, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight, foods = foodsL)
 
         if "infoEdit" in request.form:
-            return render_template("profile.html", user = user, d= False, d1 = d1, d2 = d2, food = food, exercises = exer, age = age, height = height, weight = weight, est = 0)
+            return render_template("profile.html", user = user, d= False, d2 = d2, food = food, exercises = exer, age = age, height = height, weight = weight, foods = foodsL)
+       
+        if "newInfo" in request.form:
+            g = True
+            
 
 
 
-
-    return render_template("profile.html", user = user, d=d, d1 = True, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight, est = 0)
+    return render_template("profile.html", user = user, d= True, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight, foods = foodsL)
 
 
 @app.route('/explore', methods=["GET", "POST"])
@@ -249,6 +251,21 @@ def fetch(table, criteria, data, params=()):
     data = c.fetchall()
     db.close()
     return data
+
+def getFoodsList(criteria, data, params=()):
+    DB_FILE = "static/food.db"
+    conn = sqlite3.connect(DB_FILE)
+    conn.row_factory = sqlite3.Row
+    #conn.execute("PRAGMA foreign_keys = ON;")
+    db = conn
+    c = db.cursor()
+    query = f"SELECT {data} FROM food WHERE {criteria}"
+    c.execute(query, params)
+    data = c.fetchall()
+    db.close()
+    return data
+    
+
 
 def update_userinfo(user, kind, info):
     db = sqlite3.connect(DB_FILE)

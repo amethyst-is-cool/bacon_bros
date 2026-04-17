@@ -37,12 +37,33 @@ naomiK -- 2026-04-07 20:00
 * WORKING ON APP
     - Fixed login and register
 
+veronikaD -- 2026-04-13 22:00
+    - drew out revised web layout and assigned clearer roles
+
 naomiK -- 2026-04-14 21:11
 * WORKING ON PROFILE
     - Added profile html and route
     - Fixed issue with register/home
 
+veronikaD -- 2026-04-14 22:00
+* WORKING ON PERSONALIZATION
+    - formatted home, updated all page nav bars and included bootstrap links
+    - updated login and register css
+
+veronikaD -- 2026-04-15 11:30
+    - updated personalization page to show user info
+
 alvinS -- 2026-04-15 11:30
 * WORKING ON DATABASE
     - Added dataset into Sqlite3 db
     - Started search functions to return database data
+
+veronikaD -- 2026-04-16 17:30
+HOME STRETCH CHECKLIST:
+------------------------------------
+* produce personalization backend :: Veronika
+* parse through exercise data :: Alvin
+* finalize explore page + chart.js :: Andrew
+* finalize profile page + backend :: Naomi
+* produce bootstrap CSS: Veronika
+====================================

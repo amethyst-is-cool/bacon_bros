@@ -6,6 +6,36 @@
 </head>
 <body>
 {{foods}}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% for i in foods %}
+<canvas id={{foods[0]}} width = "200" height = "200"></canvas>
+{% endfor %}
+<script>
+const data = {
+  labels: {{labels | tojson}},
+  datasets: [{
+    label: 'Food',
+    data: {{values | tojson}},
+    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+    borderColor: 'rgba(54, 162, 235, 1)',
+    borderWidth: 2
+  }]
+};
+
+const config = {
+  type: 'radar',
+  data: data,
+  options: {
+    scales: {
+      r: {
+        beginAtZero: true
+      }
+    }
+  }
+};
+
+const ctx = document.getElementById('myRadarChart').getContext('2d');
+new Chart(ctx, config);
+</script>
 </body>
 </html>
-

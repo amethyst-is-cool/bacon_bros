@@ -231,7 +231,7 @@ def personalize():
 def results():
     if "username" not in session:
         return redirect("/login")
-    return render_template("results.html", query = request.args['search_query'], foods = data.searchFood(request.args['search_query']))
+    return render_template("results.html", params = ["calories", "fat", "sugar", "protein", "fiber", "cholesterol"], query = request.args['search_query'], foods = data.searchFood(request.args['search_query']))
 
 
 

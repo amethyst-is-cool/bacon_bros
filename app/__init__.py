@@ -23,18 +23,38 @@ db = get_db()
 c = db.cursor()
 
 
-c.execute(
-    """
-    CREATE TABLE IF NOT EXISTS users (
+c.execute("""
+CREATE TABLE IF NOT EXISTS users (
     username TEXT UNIQUE,
     password TEXT,
     pFoods TEXT,
     pExercises TEXT,
     age INT,
     weight INT,
-    height INT)
-    """
+    height INT
 )
+""")
+
+c.execute("""
+CREATE TABLE IF NOT EXISTS user_foods (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT,
+    name TEXT,
+    calories INTEGER,
+    fat REAL,
+    sugar REAL,
+    protein REAL,
+    fiber REAL,
+    cholesterol REAL
+)
+""")
+
+#temporary food preferences for user with username a
+c.execute("""
+INSERT INTO user_foods 
+(username, name, calories, fat, sugar, protein, fiber, cholesterol)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+""", ('a', 'Apple', 95, 0.3, 19, 0.5, 4.4, 0))
 
 
 db.commit()
@@ -150,11 +170,6 @@ def profile():
     return render_template("profile.html", user = user, d=d, d1 = True, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight, est = 0)
 
 
-
-
-
-
-
 @app.route('/explore', methods=["GET", "POST"])
 def explore():
     if "username" not in session:
@@ -162,28 +177,54 @@ def explore():
 
     return render_template("chart.html", labels = ["test1", "test2", "test3", "test4", "test5"], values = [5, 10, 15, 25, 30])
 
+#personalize is responsible for displaying info about your food and exerc preferences
 @app.route('/personalize', methods=["GET", "POST"])
 def personalize():
     if "username" not in session:
         return redirect("/login")
 
+    #have to tap into db again to get the user preferences tables to be able to rmv some
+    db = get_db()
+    c = db.cursor()
+
     user = session["username"]
-    food = fetch("users", "username = ?", "pFoods", (session["username"],))[0][0]
+
+    #pulls list of food
+    food = c.execute("""
+        SELECT name, calories, fat, sugar, protein, fiber, cholesterol
+        FROM user_foods
+        WHERE username = ?
+    """, (user,)).fetchall()
+
+    #temporary pull of exers
     exer = fetch("users", "username = ?", "pExercises", (session["username"],))[0][0]
 
-    return render_template("exercise.html", user=user, food=food, exercise=exer)
 
+    #if the button is pressed to remove that food from list
+    if request.method == 'POST':
+        if request.form.get("action") == "remove_food":
+            food_name = request.form.get("food_name")
 
+            c.execute("""
+                DELETE FROM user_foods
+                WHERE username = ? AND name = ?
+            """, (user, food_name))
 
+            db.commit()
+            return redirect("/personalize")
 
+#        Scrap cuz too tedious just create table of exers
+#        if request.form.get("action") == "remove_exercise":
+#            exercise_name = request.form.get("exercise_name")
+#
+#            import json
+#            exer_list = json.loads(exer) if exer else []
+#
+#            exer_list = [e for e in exer_list if e[0] != exercise_name]
+#
+#            new_exer = json.dumps(exer_list)
 
-@app.route("/explore", methods=["GET", "POST"])
-def chart():
-    if "username" not in session:
-        return redirect("/login")
-
-    return render_template("chart.html", labels = ["test1", "test2", "test3", "test4", "test5"], values = [5, 10, 15, 25, 30])
-
+    return render_template("personalize.html", user=user, food=food, exercise=exer)
 
 
 @app.route("/results", methods=["GET","POST"])
@@ -191,6 +232,7 @@ def results():
     if "username" not in session:
         return redirect("/login")
     return render_template("results.html", query = request.args['query'], foods = data.searchFoods(request.args['query']))
+
 
 
 @app.route("/logout", methods=["GET", "POST"])

@@ -29,15 +29,48 @@
 
     <div>
         <h3>Your Preferred Foods</h3>
-        <p>List goes here or button to profile goes here</p>
-        <form action="/profile" method="POST"><input type="submit" value="PROFILE"></form>  
+          <!-- 
+          TEST CASE: print the whole preference list
+          {% print(food) %} -->
+
+          <ul>
+          {% for given_food in food %}
+            <li>
+              <div>
+                <p>Name: {{ given_food[0] }}</p>
+                <p>Calories: {{ given_food[1] }}</p>
+                <p>Protein: {{ given_food[4] }}</p>
+              </div>
+              <div>
+              <form method="POST" action="/personalize" style="display:inline;">
+                <input type="hidden" name="food_name" value="{{ given_food[0] }}">
+                <button type="submit" name="action" value="remove_food">Remove</button>
+              </form>
+              </div>
+            </li>
+          {% endfor %}
+          </ul>
+
+        <form action="/profile" method="POST"><input type="submit" value="ADD MORE"></form>  
     </div>
     
     <div>
-        <h3>Your Preferred Workouts</h3>
-        <p>List goes here or button to profile goes here</p>
-        <form action="/profile" method="POST"><input type="submit" value="PROFILE"></form>  
-    </div>   
+      <ul>
+      {% for given_exercise in exercise %}
+        <li>
+          Name: {{ given_exercise[0] }} <br>
+          Calories Burned: {{ given_exercise[1] }}
+          
+          <form method="POST" action="/personalize">
+            <input name="exercise_name" value="{{ given_exercise[0] }}">
+            <button class="button" type="submit" name="action" value="remove_exercise">
+              Remove
+            </button>
+          </form>
+        </li>
+      {% endfor %}
+      </ul>
+    </div>  
     
     <div>
         <h3>PERSONALIZED WORKOUT PLAN</h3>

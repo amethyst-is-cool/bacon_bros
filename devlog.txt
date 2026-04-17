@@ -73,3 +73,8 @@ veronikaD -- 2026-04-16 22:00
     - completed bootstrap for both login and signup, pages complete
     - created preferred food SQLite table for easier user information editing
     - completed the process of retrieving and removing preferred foods for personalization page
+
+naomiK -- 2026-04-17 02:11
+* WORKING ON PROFILE/HOME
+    - Added description of website
+    - Fixed form error in profile

@@ -260,5 +260,5 @@ def update_userinfo(user, kind, info):
 
 # Flask
 if __name__=='__main__':
-    app.debug = False
+    app.debug = True
     app.run()

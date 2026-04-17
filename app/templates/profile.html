@@ -29,9 +29,9 @@
 
     <h3>Basic Info</h3>
 
-    <form>
+    <form method="POST">
         <h3>What is your age?</h3>
-        {{age}}
+        {{age}} years old
         
         {% if not d %}
         <input type="number" name="age">
@@ -47,13 +47,14 @@
 
 
 
-        <h3>What is your height (in)?</h3>
-        {{height}}
+        <h3>What is your height (cm)?</h3>
+        {{height}} cm
 
         {% if not d %}
         <input type="number" name="height">
         {%endif%}
 
+        <br><br>
 
         {%if not d%}
         <button type="submit" name = "newInfo">Submit</button>
@@ -68,11 +69,14 @@
         <button type="submit" name = "infoEdit">Edit</button>
         {% endif %}
 
+        {{d}}
 
 
     </form>
 
 
+    <br><br>
+    <br><br>
 
 
 

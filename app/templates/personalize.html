@@ -41,11 +41,12 @@
                 <p>Calories: {{ given_food[1] }}</p>
                 <p>Protein: {{ given_food[4] }}</p>
               </div>
+
               <div>
-              <form method="POST" action="/personalize" style="display:inline;">
-                <input type="hidden" name="food_name" value="{{ given_food[0] }}">
-                <button type="submit" name="action" value="remove_food">Remove</button>
-              </form>
+                <form method="POST" action="/personalize" style="display:inline;">
+                  <input type="hidden" name="food_name" value="{{ given_food[0] }}">
+                  <button type="submit" name="action" value="remove_food">Remove</button>
+                </form>
               </div>
             </li>
           {% endfor %}
@@ -55,27 +56,30 @@
     </div>
     
     <div>
+      <h3>Your Preferred Workouts</h3>
       <ul>
       {% for given_exercise in exercise %}
         <li>
-          Name: {{ given_exercise[0] }} <br>
-          Calories Burned: {{ given_exercise[1] }}
           
-          <form method="POST" action="/personalize">
-            <input name="exercise_name" value="{{ given_exercise[0] }}">
-            <button class="button" type="submit" name="action" value="remove_exercise">
-              Remove
-            </button>
-          </form>
+          <div>
+              <p>Name: {{ given_exercise[9] }}</p>
+              <p>Workout: {{ given_exercise[7] }}</p>
+              <p>Sets: {{ given_exercise[10] }}</p>
+              <p>Reps: {{ given_exercise[11] }}</p>
+              <p>Calories Burned: {{ given_exercise[13] }}</p>
+              <p>Target Muscle Group: {{ given_exercise[14] }}</p>
+            </div>
+          
+            <div>
+                <form method="POST" action="/personalize" style="display:inline;">
+                <input type="hidden" name="exercise_name" value="{{ given_exercise[9] }}">
+                <button type="submit" name="action" value="remove_exercise">Remove</button>
+              </form>
+            </div>
         </li>
       {% endfor %}
       </ul>
+      <form action="/profile" method="POST"><input type="submit" value="ADD MORE"></form>  
     </div>  
-    
-    <div>
-        <h3>PERSONALIZED WORKOUT PLAN</h3>
-        <p>List of preferred workouts and how many times you'd have to repeat them to burn preferred foods calories</p>
-    </div>
-    
   </body>
 </html>

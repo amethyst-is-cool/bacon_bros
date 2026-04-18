@@ -49,6 +49,28 @@ CREATE TABLE IF NOT EXISTS user_foods (
 )
 """)
 
+c.execute("""
+CREATE TABLE IF NOT EXISTS user_exercises (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT,
+    age INT,
+    gender TEXT,
+    weight REAL,
+    height REAL,
+    session_duration REAL,
+    calories_burned REAL,
+    workout_type TEXT,
+    BMI REAL,
+    name TEXT,
+    sets INT,
+    reps INT,
+    benefit TEXT,
+    burns_calories REAL,
+    target_muscle_group TEXT,
+    workout TEXT
+)
+""")
+
 #temporary food preferences for user with username a
 c.execute("""
 INSERT INTO user_foods
@@ -56,6 +78,11 @@ INSERT INTO user_foods
 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
 """, ('a', 'Apple', 95, 0.3, 19, 0.5, 4.4, 0))
 
+c.execute("""
+INSERT INTO user_exercises
+(username, age, gender, weight, height, session_duration, calories_burned, workout_type, BMI, name, sets, reps, benefit, burns_calories, target_muscle_group, workout )
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+""", ('a', 0, "male", 0.3, 1.9, 0.5, 4.4, "abs", 9.0, "crunch", 9, 2, "good", 20.3, "gut", "lala"))
 
 db.commit()
 db.close()
@@ -129,6 +156,7 @@ def register():
 def profile():
     if "username" not in session:
         return redirect("/login")
+    
     user = session["username"]
     food = fetch("users", "username = ?", "pFoods", (session["username"],))[0][0]
     exer = fetch("users", "username = ?", "pExercises", (session["username"],))[0][0]
@@ -199,8 +227,11 @@ def personalize():
     """, (user,)).fetchall()
 
     #temporary pull of exers
-    exer = fetch("users", "username = ?", "pExercises", (session["username"],))[0][0]
-
+    exer = c.execute("""
+        SELECT username, age, gender, weight, height, session_duration, calories_burned, workout_type, BMI, name, sets, reps, benefit, burns_calories, target_muscle_group, workout
+        FROM user_exercises
+        WHERE username = ?
+    """, (user,)).fetchall()
 
     #if the button is pressed to remove that food from list
     if request.method == 'POST':
@@ -211,6 +242,18 @@ def personalize():
                 DELETE FROM user_foods
                 WHERE username = ? AND name = ?
             """, (user, food_name))
+
+            db.commit()
+            return redirect("/personalize")
+
+    if request.method == 'POST':
+        if request.form.get("action") == "remove_exercise":
+            exercise_name = request.form.get("exercise_name")
+
+            c.execute("""
+                DELETE FROM user_exercises
+                WHERE username = ? AND name = ?
+            """, (user, exercise_name))
 
             db.commit()
             return redirect("/personalize")

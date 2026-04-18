@@ -22,3 +22,34 @@ function filter() {
       }
     }
 }
+
+
+
+function newF(element) {
+    const value = element.getAttribute("data-value");
+
+    fetch("/profile", {
+        method: "POST",
+        body: new URLSearchParams({
+            ch: value
+        })
+    })
+    .then(() => {
+        window.location.reload();
+    });
+}
+
+
+function delF(element) {
+    const value = element.getAttribute("data-value");
+
+    fetch("/profile", {
+        method: "POST",
+        body: new URLSearchParams({
+            del: value
+        })
+    })
+    .then(() => {
+        window.location.reload();
+    });
+}

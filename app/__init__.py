@@ -29,7 +29,8 @@ CREATE TABLE IF NOT EXISTS users (
     password TEXT,
     age INT,
     weight INT,
-    height INT
+    height INT,
+    sex TEXT
 )
 """)
 
@@ -69,12 +70,6 @@ CREATE TABLE IF NOT EXISTS user_exercises (
 )
 """)
 
-#temporary food preferences for user with username a
-c.execute("""
-INSERT INTO user_foods
-(username, name, calories, fat, sugar, protein, fiber, cholesterol)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-""", ('a', 'Apple', 95, 0.3, 19, 0.5, 4.4, 0))
 
 c.execute("""
 INSERT INTO user_exercises
@@ -129,13 +124,14 @@ def register():
             db = sqlite3.connect(DB_FILE)
             c = db.cursor()
             c.execute(
-                "INSERT INTO users VALUES (?, ?, ?, ?, ?)",
+                "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?)",
                 (
                     request.form["username"],
                     request.form["password"],
                     0,
                     0,
-                    0
+                    0,
+                    ""
                 )
             )
             db.commit()
@@ -152,24 +148,28 @@ def register():
 def profile():
     if "username" not in session:
         return redirect("/login")
-    
-    db = get_db()
-    c = db.cursor()
 
     user = session["username"]
 
-    food = fetch("users", "username = ?", "username", (session["username"],))[0][0]
+    food = fetch("user_foods", "username = ?", "name", (session["username"],))
     exer = fetch("users", "username = ?", "username", (session["username"],))[0][0]
+    
 
+    sex = fetch("users", "username = ?", "sex", (session["username"],))[0][0]
     age = fetch("users", "username = ?", "age", (session["username"],))[0][0]
     height = fetch("users", "username = ?", "height", (session["username"],))[0][0]
     weight = fetch("users", "username = ?", "weight", (session["username"],))[0][0]
+
+
+    #for dropdown
 
     foods = getFoodsList(True, "name")
 
     foodsL = []
     for i in range(1, len(foods)):
         foodsL += [foods[i][0]]
+
+    # for checking if BMI, etc. can be calculated
 
     if height != 0 and age != 0 and weight != 0:
         haveInfo = True
@@ -182,22 +182,43 @@ def profile():
     if request.method == "POST":
         
         if "exerEdit" in request.form:
-            return render_template("profile.html", user = user, d= d, d2 = False, food = food, exercises = exer, age = age, height = height, weight = weight, foods = foodsL)
+            return render_template("profile.html", user = user, d= d, d2 = False, food = food, exercises = exer, age = age, height = height, weight = weight, foods = foodsL, sex = sex)
         if "exerSub" in request.form:
             update_userinfo(session["username"], "pExercises", exer + request.form["idk2"])
             exer = fetch("users", "username = ?", "pExercises", (session["username"],))[0][0]
-            return render_template("profile.html", user = user, d=d, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight, foods = foodsL)
+            return render_template("profile.html", user = user, d=d, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight, foods = foodsL, sex = sex)
 
         if "infoEdit" in request.form:
-            return render_template("profile.html", user = user, d= False, d2 = d2, food = food, exercises = exer, age = age, height = height, weight = weight, foods = foodsL)
+            return render_template("profile.html", user = user, d= False, d2 = d2, food = food, exercises = exer, age = age, height = height, weight = weight, foods = foodsL, sex = sex)
        
         if "newInfo" in request.form:
-            g = True
-            
+            update_userinfo(session["username"], "age", request.form["age"])
+            age = fetch("users", "username = ?", "age", (session["username"],))[0][0]
+            update_userinfo(session["username"], "weight", request.form["weight"])
+            weight = fetch("users", "username = ?", "weight", (session["username"],))[0][0]
+            update_userinfo(session["username"], "height", request.form["height"])   
+            height = fetch("users", "username = ?", "height", (session["username"],))[0][0]
+            update_userinfo(session["username"], "sex", request.form["sex"])   
+            sex = fetch("users", "username = ?", "sex", (session["username"],))[0][0]
+            return render_template("profile.html", user = user, d= d, d2 = d2, food = food, exercises = exer, age = age, height = height, weight = weight, foods = foodsL, sex = sex)
+
+        if "ch" in request.form:
+            choice = request.form["ch"]
+            addFood(choice, session["username"])
+            food = fetch("user_foods", "username = ?", "name", (session["username"],))
+            return render_template("profile.html", user = user, d= True, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight, foods = foodsL, sex = sex)
+
+        if "del" in request.form:
+            choice = request.form["del"]
+            deleteFood(choice, session["username"])
+            food = fetch("user_foods", "username = ?", "name", (session["username"],))
+            return render_template("profile.html", user = user, d= True, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight, foods = foodsL, sex = sex)
 
 
 
-    return render_template("profile.html", user = user, d= True, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight, foods = foodsL)
+    return render_template("profile.html", user = user, d= True, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight, foods = foodsL, sex = sex)
+
+
 
 
 @app.route('/explore', methods=["GET", "POST"])
@@ -206,6 +227,9 @@ def explore():
         return redirect("/login")
 
     return render_template("chart.html", labels = ["test1", "test2", "test3", "test4", "test5"], values = [5, 10, 15, 25, 30])
+
+
+
 
 #personalize is responsible for displaying info about your food and exerc preferences
 @app.route('/personalize', methods=["GET", "POST"])
@@ -244,6 +268,7 @@ def personalize():
             """, (user, food_name))
 
             db.commit()
+            db.close()
             return redirect("/personalize")
 
     if request.method == 'POST':
@@ -256,10 +281,12 @@ def personalize():
             """, (user, exercise_name))
 
             db.commit()
+            db.close()
             return redirect("/personalize")
 
 
-
+    db.commit()
+    db.close()
     return render_template("personalize.html", user=user, food=food, exercise=exer)
 
 
@@ -276,6 +303,27 @@ def logout():
     session.clear()
     return redirect("/login")
 
+def addFood(foodName, user):
+    db = get_db()
+    c = db.cursor()
+    n = getFoodsList("name = ?", "*", (foodName,))
+    print(n[0][0])
+    query = "INSERT INTO user_foods (username, name, calories, fat, sugar, protein, fiber, cholesterol) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+    params = (user, foodName, n[0][0], n[0][1], n[0][2], n[0][3], n[0][4], n[0][5])
+    c.execute(query, params)
+    db.commit()
+    db.close()
+    return True
+
+def deleteFood(foodName, user):
+    db = get_db()
+    c = db.cursor()
+    query = "DELETE FROM user_foods WHERE username = ? AND name = ? LIMIT 1"
+    params = (user, foodName)
+    c.execute(query, params)
+    db.commit()
+    db.close()
+    return True
 
 def fetch(table, criteria, data, params=()):
     db = get_db()
@@ -283,6 +331,7 @@ def fetch(table, criteria, data, params=()):
     query = f"SELECT {data} FROM {table} WHERE {criteria}"
     c.execute(query, params)
     data = c.fetchall()
+    db.commit()
     db.close()
     return data
 
@@ -296,11 +345,10 @@ def getFoodsList(criteria, data, params=()):
     query = f"SELECT {data} FROM food WHERE {criteria}"
     c.execute(query, params)
     data = c.fetchall()
+    db.commit()
     db.close()
     return data
     
-
-
 def update_userinfo(user, kind, info):
     db = sqlite3.connect(DB_FILE)
     c = db.cursor()

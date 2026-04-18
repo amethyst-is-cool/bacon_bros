@@ -41,7 +41,7 @@
         {{ age }} years old
         
         {% if not d %}
-        <input type="number" name="age">
+        <input type="number" name="age" value = {{age}} required>
         {% endif %}
 
 
@@ -49,7 +49,7 @@
         {{ weight }} lbs
 
         {% if not d %}
-        <input type="number" name="weight">
+        <input type="number" name="weight" value = {{weight}} required>
         {% endif %}        
 
 
@@ -58,15 +58,39 @@
         {{ height }} cm
 
         {% if not d %}
-        <input type="number" name="height">
+        <input type="number" name="height" value = {{height}} required>
         {% endif %}
+
+
+
+        <h3>What is your assigned sex at birth?</h3>
+        {{ sex }} 
+
+        {% if not d %}
+          <fieldset>
+            <input type="radio" id = "f" name = "sex" value="Female" required>
+            <label for="f">Female</label><br>
+
+            <input type="radio" id = "m" name = "sex" value="Male">
+            <label for="m">Male</label><br>
+
+            <input type="radio" id = "p" name = "sex" value="Prefer not to say">
+            <label for="p">Prefer not to answer</label><br>
+          </fieldset>
+        {% endif %}
+
+
+
+
+
+
 
         <br><br>
 
-        {% if not d %}
-        <button type="submit" name ="newInfo">Submit</button>
-        {% else %}
+        {% if d %}
         <button type="submit" name = "infoEdit">Edit</button>
+        {% else %}
+        <button type="submit" name ="newInfo">Submit</button>
         {% endif %}
       
 
@@ -79,25 +103,35 @@
 
 
     <h3>Today's Meal Plan</h3>
-        {{food}}
-
+      <ul>
+        {% for f in food %}
+          <li>
+            <form>
+            {{f[0]}}  
+            <button onclick="delF(this)" data-value="{{f[0]}}">x</button> 
+            </form>
+          </li>
+        {% endfor %}
+      </ul>
+          <br>
           <button onclick="drop()" id = "foodEdit">Edit</button>
           <br>
+
+     
           <div class="dropdown1">
-            <div id="dropd" class="menu">
-              <div class="searchBar" id = 's'>
-                <input type="text" placeholder="Search..." id="search" onkeyup="filter()">
-              </div>
-                <div id = "options" class="opt">
-                  {% for f in foods %}
-                  <p>{{f}}</p>
-                  {% endfor %}
+              <div id="dropd" class="menu">
+                <div class="searchBar" id = 's'>
+                  <input type="text" placeholder="Search..." id="search" onkeyup="filter()">
                 </div>
-            </div>
+                <div id = "options" class="opt">
+                    {% for f in foods %}
+                    <p onclick ="newF(this)" data-value = "{{f}}">{{f}}</p> 
+                    {% endfor %}
+                </div>
+              </div>
+
           </div>
-
-        </form>
-
+        
 
         <h3>Exercise Preferences</h3>
         {{exercises}}

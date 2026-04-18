@@ -160,34 +160,12 @@ def profile():
 
     user = session["username"]
 
-    #pulls list of food
-    food = c.execute("""
-        SELECT name, calories, fat, sugar, protein, fiber, cholesterol
-        FROM user_foods
-        WHERE username = ?
-    """, (user,)).fetchall()
-
-    # pull of exers
-    exer = c.execute("""
-        SELECT username, age, gender, weight, height, session_duration, calories_burned, workout_type, BMI, name, sets, reps, benefit, burns_calories, target_muscle_group, workout
-        FROM user_exercises
-        WHERE username = ?
-    """, (user,)).fetchall()
-    
-    
-    #user = session["username"]
-    #food = fetch("users", "username = ?", "pFoods", (session["username"],))[0][0]
-    #exer = fetch("users", "username = ?", "pExercises", (session["username"],))[0][0]
+    food = fetch("users", "username = ?", "pFoods", (session["username"],))[0][0]
+    exer = fetch("users", "username = ?", "pExercises", (session["username"],))[0][0]
 
     age = c.execute("""SELECT age FROM users WHERE username = ?""", (user,)).fetchall()
     height = c.execute("""SELECT height FROM users WHERE username = ?""", (user,)).fetchall()
     weight = c.execute("""SELECT weight FROM users WHERE username = ?""", (user,)).fetchall()
-
-    #age = fetch("users", "username = ?", "age", (session["username"],))[0][0]
-    #height = fetch("users", "username = ?", "height", (session["username"],))[0][0]
-    #why u have two age
-    #age = fetch("users", "username = ?", "age", (session["username"],))[0][0]
-    #weight = fetch("users", "username = ?", "weight", (session["username"],))[0][0]
 
     foods = getFoodsList(True, "name")
 

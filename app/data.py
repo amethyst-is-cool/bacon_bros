@@ -10,7 +10,6 @@ def csvParse():
     create_table = """
         CREATE TABLE IF NOT EXISTS workouts (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT,
         age INT,
         gender TEXT,
         weight REAL,
@@ -35,10 +34,9 @@ def csvParse():
     contents = csv.reader(file)
     r = 0
     for row in contents:
+        row = [r] + row[0:4] + row[7:10] + [row[14]] + row[32:38] + [row[42]]
+        cursor.execute("INSERT INTO workouts (id, age, gender, weight, height, session_duration, calories_burned, workout_type, BMI, name, sets, reps, benefit, burns_calories, target_muscle_group, workout) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", row)
         r += 1
-        print(row)
-        row = [r, "username"] + row[0:4] + row[7:10] + [row[14]] + row[33:39] + [row[43]]
-        cursor.execute("INSERT INTO workouts (id, username, age, gender, weight, height, session_duration, calories_burned, workout_type, BMI, name, sets, reps, benefit, burns_calories, target_muscle_group, workout) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", row)
     # assert False
     #
     # insert_records = "INSERT INTO food (name, calories, fat, sugar, protein, fiber, cholesterol) VALUES(?, ?)"
@@ -55,6 +53,7 @@ def csvParse():
     data.commit()
     data.close()
 
+# csvParse()
 
 def searchFood(food):
     data = sqlite3.connect('static/food.db')
@@ -75,4 +74,4 @@ def searchWorkout(id):
     x = cursor.fetchall()
     return x
 
-print(searchWorkout(19999))
+print(searchWorkout(1))

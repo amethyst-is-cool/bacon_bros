@@ -78,3 +78,10 @@ naomiK -- 2026-04-17 02:11
 * WORKING ON PROFILE/HOME
     - Added description of website
     - Fixed form error in profile
+
+alvinS -- 2026-04-18 12:24
+* WORKING ON DATABASE
+    - Added workout database and parsed data from dataset
+    - Removed unnecessary data
+    - Added search function to return data by include
+    

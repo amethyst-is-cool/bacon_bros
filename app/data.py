@@ -2,45 +2,59 @@ import csv
 import sqlite3
 
 
-# if __name__  == "__main__":
-#     data = sqlite3.connect('static/food.db')
-#
-#     cursor = data.cursor()
-#
-#     create_table = '''CREATE TABLE IF NOT EXISTS food(
-#                     name TEXT NOT NULL,
-#                     calories INTEGER,
-#                     fat REAL,
-#                     sugar REAL,
-#                     protein REAL,
-#                     fiber REAL,
-#                     cholesterol REAL);
-#                     '''
-#     cursor.execute(create_table)
-#
-#     files = ['../../foodone.csv', '../../foodtwo.csv', '../../foodthree.csv', '../../foodfour.csv', '../../foodfive.csv']
-#     for i in range(5):
-#         file = open(files[i])
-#
-#         contents = csv.reader(file)
-#         for row in contents:
-#             row = row[2:5] + row[9:13]
-#             cursor.execute("INSERT INTO food (name, calories, fat, sugar, protein, fiber, cholesterol) VALUES(?, ?, ? ,?, ?, ?, ?)", row)
-#         # assert False
-#         #
-#         # insert_records = "INSERT INTO food (name, calories, fat, sugar, protein, fiber, cholesterol) VALUES(?, ?)"
-#         #
-#         # cursor.executemany(insert_records, contents)
-#
-#         select_all = "SELECT * FROM food"
-#
-#         rows = cursor.execute(select_all).fetchall()
-#
-#         for r in rows:
-#             print(r)
-#
-#     data.commit()
-#     data.close()
+def csvParse():
+    data = sqlite3.connect('static/workout.db')
+
+    cursor = data.cursor()
+
+    create_table = """
+        CREATE TABLE IF NOT EXISTS workouts (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT,
+        age INT,
+        gender TEXT,
+        weight REAL,
+        height REAL,
+        session_duration REAL,
+        calories_burned REAL,
+        workout_type TEXT,
+        BMI REAL,
+        name TEXT,
+        sets INT,
+        reps INT,
+        benefit TEXT,
+        burns_calories REAL,
+        target_muscle_group TEXT,
+        workout TEXT)
+    """
+
+    cursor.execute(create_table)
+
+    file = open("../../workout.csv")
+
+    contents = csv.reader(file)
+    r = 0
+    for row in contents:
+        r += 1
+        print(row)
+        row = [r, "username"] + row[0:4] + row[7:10] + [row[14]] + row[33:39] + [row[43]]
+        cursor.execute("INSERT INTO workouts (id, username, age, gender, weight, height, session_duration, calories_burned, workout_type, BMI, name, sets, reps, benefit, burns_calories, target_muscle_group, workout) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", row)
+    # assert False
+    #
+    # insert_records = "INSERT INTO food (name, calories, fat, sugar, protein, fiber, cholesterol) VALUES(?, ?)"
+    #
+    # cursor.executemany(insert_records, contents)
+
+    select_all = "SELECT * FROM workouts"
+
+    rows = cursor.execute(select_all).fetchall()
+
+    for r in rows:
+        print(r)
+
+    data.commit()
+    data.close()
+
 
 def searchFood(food):
     data = sqlite3.connect('static/food.db')
@@ -51,3 +65,14 @@ def searchFood(food):
     if len(x)>5:
         return x[0:5]
     return x
+
+
+def searchWorkout(id):
+    data = sqlite3.connect('static/workout.db')
+    cursor = data.cursor()
+
+    cursor.execute("SELECT * FROM workouts WHERE id = ?", (id, ))
+    x = cursor.fetchall()
+    return x
+
+print(searchWorkout(19999))

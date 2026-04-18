@@ -129,12 +129,10 @@ def register():
             db = sqlite3.connect(DB_FILE)
             c = db.cursor()
             c.execute(
-                "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO users VALUES (?, ?, ?, ?, ?)",
                 (
                     request.form["username"],
                     request.form["password"],
-                    "",
-                    "",
                     0,
                     0,
                     0
@@ -160,12 +158,12 @@ def profile():
 
     user = session["username"]
 
-    food = fetch("users", "username = ?", "pFoods", (session["username"],))[0][0]
-    exer = fetch("users", "username = ?", "pExercises", (session["username"],))[0][0]
+    food = fetch("users", "username = ?", "username", (session["username"],))[0][0]
+    exer = fetch("users", "username = ?", "username", (session["username"],))[0][0]
 
-    age = c.execute("""SELECT age FROM users WHERE username = ?""", (user,)).fetchall()
-    height = c.execute("""SELECT height FROM users WHERE username = ?""", (user,)).fetchall()
-    weight = c.execute("""SELECT weight FROM users WHERE username = ?""", (user,)).fetchall()
+    age = fetch("users", "username = ?", "age", (session["username"],))[0][0]
+    height = fetch("users", "username = ?", "height", (session["username"],))[0][0]
+    weight = fetch("users", "username = ?", "weight", (session["username"],))[0][0]
 
     foods = getFoodsList(True, "name")
 
@@ -260,16 +258,7 @@ def personalize():
             db.commit()
             return redirect("/personalize")
 
-#        Scrap cuz too tedious just create table of exers
-#        if request.form.get("action") == "remove_exercise":
-#            exercise_name = request.form.get("exercise_name")
-#
-#            import json
-#            exer_list = json.loads(exer) if exer else []
-#
-#            exer_list = [e for e in exer_list if e[0] != exercise_name]
-#
-#            new_exer = json.dumps(exer_list)
+
 
     return render_template("personalize.html", user=user, food=food, exercise=exer)
 

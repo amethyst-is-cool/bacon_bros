@@ -38,7 +38,7 @@
 
     <form method="POST">
         <h3>What is your age?</h3>
-        {{age}} years old
+        {{ age }} years old
         
         {% if not d %}
         <input type="number" name="age">
@@ -46,26 +46,26 @@
 
 
         <h3>What is your weight (lbs)?</h3>
-        {{weight}} lbs
+        {{ weight }} lbs
 
         {% if not d %}
         <input type="number" name="weight">
-        {%endif%}        
+        {% endif %}        
 
 
 
         <h3>What is your height (cm)?</h3>
-        {{height}} cm
+        {{ height }} cm
 
         {% if not d %}
         <input type="number" name="height">
-        {%endif%}
+        {% endif %}
 
         <br><br>
 
-        {%if not d%}
+        {% if not d %}
         <button type="submit" name ="newInfo">Submit</button>
-        {%else%}
+        {% else %}
         <button type="submit" name = "infoEdit">Edit</button>
         {% endif %}
       

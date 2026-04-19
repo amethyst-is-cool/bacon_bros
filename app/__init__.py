@@ -30,7 +30,8 @@ CREATE TABLE IF NOT EXISTS users (
     age INT,
     weight INT,
     height INT,
-    sex TEXT
+    sex TEXT,
+    activity TEXT
 )
 """)
 
@@ -81,6 +82,7 @@ db.commit()
 db.close()
 
 
+
 @app.route('/', methods=["GET", "POST"])
 def homepage():
     if "username" not in session:
@@ -124,13 +126,14 @@ def register():
             db = sqlite3.connect(DB_FILE)
             c = db.cursor()
             c.execute(
-                "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?)",
+                "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?)",
                 (
                     request.form["username"],
                     request.form["password"],
                     0,
                     0,
                     0,
+                    "",
                     ""
                 )
             )
@@ -164,6 +167,7 @@ def profile():
     age = fetch("users", "username = ?", "age", (session["username"],))[0][0]
     height = fetch("users", "username = ?", "height", (session["username"],))[0][0]
     weight = fetch("users", "username = ?", "weight", (session["username"],))[0][0]
+    act = fetch("users", "username = ?", "activity", (session["username"],))[0][0]
 
 
     #for dropdown
@@ -176,25 +180,22 @@ def profile():
 
     # for checking if BMI, etc. can be calculated
 
-    if height != 0 and age != 0 and weight != 0:
+    if height != 0 and age != 0 and weight != 0 and act != "" and sex != "":
         haveInfo = True
+        sts = statC(age, weight, height, sex, act)
     else:
         haveInfo = False
+        sts = []
 
 
     values = nutDist(session["username"])
 
     if request.method == "POST":
         
-        if "exerEdit" in request.form:
-            return render_template("profile.html", user = user, d= d, d2 = False, food = food, exercises = exer, age = age, height = height, weight = weight, foods = foodsL, sex = sex)
-        if "exerSub" in request.form:
-            update_userinfo(session["username"], "pExercises", exer + request.form["idk2"])
-            exer = fetch("users", "username = ?", "pExercises", (session["username"],))[0][0]
-            return render_template("profile.html", user = user, d=d, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight, foods = foodsL, sex = sex)
-
+        
         if "infoEdit" in request.form:
-            return render_template("profile.html", user = user, d= False, d2 = d2, food = food, exercises = exer, age = age, height = height, weight = weight, foods = foodsL, sex = sex)
+            return render_template("profile.html", user = user, d= False, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight, 
+            foods = foodsL, sex = sex, vals = values[1:], activity = act, stats = sts)
        
         if "newInfo" in request.form:
             update_userinfo(session["username"], "age", request.form["age"])
@@ -205,26 +206,38 @@ def profile():
             height = fetch("users", "username = ?", "height", (session["username"],))[0][0]
             update_userinfo(session["username"], "sex", request.form["sex"])   
             sex = fetch("users", "username = ?", "sex", (session["username"],))[0][0]
-            return render_template("profile.html", user = user, d= d, d2 = d2, food = food, exercises = exer, age = age, height = height, weight = weight, foods = foodsL, sex = sex)
+            update_userinfo(session["username"], "activity", request.form["act"])   
+            act = fetch("users", "username = ?", "activity", (session["username"],))[0][0]
+            if height != 0 and age != 0 and weight != 0 and act != "" and sex != "":
+                haveInfo = True
+                sts = statC(age, weight, height, sex, act)
+            else:
+                haveInfo = False
+                sts = []
+            return render_template("profile.html", user = user, d= d, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight, 
+            foods = foodsL, sex = sex, vals = values, activity = act, stats = sts)
 
+        #adding food
         if "ch" in request.form:
             choice = request.form["ch"]
             addFood(choice, session["username"])
             food = fetch("user_foods", "username = ?", "name", (session["username"],))
             values = nutDist(session["username"])
-            return render_template("profile.html", user = user, d= True, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight, foods = foodsL, sex = sex, vals = values[1:])
+            return render_template("profile.html", user = user, d= True, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight, 
+            foods = foodsL, sex = sex, vals = values, activity = act, stats = sts)
 
-
+        #deleting food
         if "del" in request.form:
             choice = request.form["del"]
             deleteFood(choice, session["username"])
-            food = fetch("user_foods", "username = ?", "name", (session["username"],))
             values = nutDist(session["username"])
-            return render_template("profile.html", user = user, d= True, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight, foods = foodsL, sex = sex, vals = values[1:])
+            food = fetch("user_foods", "username = ?", "name", (session["username"],))
+            return render_template("profile.html", user = user, d= True, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight, 
+            foods = foodsL, sex = sex, vals = values, activity = act, stats = sts)
 
 
-
-    return render_template("profile.html", user = user, d= True, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight, foods = foodsL, sex = sex, vals = values[1:])
+    return render_template("profile.html", user = user, d= True, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight, 
+    foods = foodsL, sex = sex, vals = values, activity = act, stats = sts)
 
 
 
@@ -355,6 +368,8 @@ def getFoodsList(criteria, data, params=()):
     db.commit()
     db.close()
     return data
+
+
     
 def update_userinfo(user, kind, info):
     db = sqlite3.connect(DB_FILE)
@@ -365,8 +380,7 @@ def update_userinfo(user, kind, info):
 
 def nutDist(user):
     vls = []
-    totalCals = 0
-    nutrients = ['calories', 'fat', 'sugar', 'protein', 'fiber', 'cholesterol']
+    nutrients = ['calories', 'fat', 'cholesterol', 'sugar', 'fiber', 'protein']
     for i in nutrients:
         sm = 0
         lst = fetch("user_foods", "username = ?", i, (user,))
@@ -376,8 +390,47 @@ def nutDist(user):
     print(vls)
     return vls
 
+def statC(age, weight, height, sex, act):
+    l = []
+    status = ""
+    bmi = (weight / (height**2)) * 702
+
+    if bmi < 18.5:
+        status = "Underweight"
+    elif bmi < 24.9:
+        status = "Normal"
+    elif bmi < 29.9:
+        status = "Overweight"
+    elif bmi >= 30:
+        status = "Obese"
+
+
+    kgW = 0.453592 * weight
+    cmH = 2.54 * height
+    if sex == "Male":
+        bmr = (10 * kgW) + (6.25 * cmH) - (5 * age) + 5
+    if sex == "Female":
+        bmr = (10 * kgW) + (6.25 * cmH) - (5 * age) -161
+    else:
+        bmr = ((10 * kgW) + (6.25 * cmH) - (5 * age) + 5) + ((10 * kgW) + (6.25 * cmH) - (5 * age) -161) / 2
+
+    if act == "Sedentary":
+        tdee = bmr * 1.2
+    if act == "Lightly Active":
+        tdee = bmr * 1.375
+    if act == "Moderately Active":
+        tdee = bmr * 1.55
+    if act == "Very Active":
+        tdee = bmr * 1.725
+    else:
+        tdee = bmr * 1.9
+
+    l = [round(bmi, 2), status, round(bmr, 2), round(tdee, 2)]
+    return l
+
+
 
 # Flask
 if __name__=='__main__':
-    app.debug = False
+    app.debug = True
     app.run()

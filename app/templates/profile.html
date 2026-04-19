@@ -25,17 +25,16 @@
       <form action="/logout" method="POST"><input type="submit" value="LOG OUT"></form>
     </nav>
 
-    <h1>PROFILE</h1>
-    
-    <h2>Hello, {{user}}!</h2>
-
-    <h3>Basic Info</h3>
+    <h1>{{user}}'s Profile</h1>
+    <br>
 
     <script>
       if (window.history.replaceState) {
           window.history.replaceState(null, null, window.location.href);
       }
     </script>
+
+    <h2>Bio Profile</h2>
 
     <form method="POST">
         <h3>What is your age?</h3>
@@ -55,14 +54,12 @@
 
 
 
-        <h3>What is your height (cm)?</h3>
+        <h3>What is your height (in)?</h3>
         {{ height }} cm
 
         {% if not d %}
         <input type="number" name="height" value = {{height}} required>
         {% endif %}
-
-
 
         <h3>What is your assigned sex at birth?</h3>
         {{ sex }} 
@@ -77,6 +74,28 @@
 
             <input type="radio" id = "p" name = "sex" value="Prefer not to say">
             <label for="p">Prefer not to answer</label><br>
+          </fieldset>
+        {% endif %}
+
+        <h3>How would you describe your activity level?</h3>
+        {{ activity }} 
+
+        {% if not d %}
+          <fieldset>
+            <input type="radio" id = "f" name = "act" value="Sedentary" required>
+            <label for="f">Sedentary</label><br>
+
+            <input type="radio" id = "m" name = "act" value="Lightly Active">
+            <label for="m">Lightly Active</label><br>
+
+            <input type="radio" id = "p" name = "act" value="Moderately Active">
+            <label for="p">Moderately Active</label><br>
+
+            <input type="radio" id = "m" name = "act" value="Very Active">
+            <label for="m">Very Active</label><br>
+
+            <input type="radio" id = "p" name = "act" value="Extra Active">
+            <label for="p">Extra Active</label><br>
           </fieldset>
         {% endif %}
 
@@ -99,32 +118,88 @@
     </form>
 
 
-    <br><br><br><br>
+    {% if not d2 %}
+      <h2>Please fill out any remaining questions above</h2>
+      
+    {% else %}
 
-    <div class = "chart">
-    <canvas id="foodNut"></canvas>
+    <br><br><br><br>
+    <div id ="report">
+
+      <h2>Results:</h2>
+      <h3>BMI: {{stats[0]}}</h3>
+      <h3>Status: {{stats[1]}}</h3>
+      <h3>BMR: {{stats[2]}}</h3>
+      <h3>TDEE: {{stats[3]}}</h3>
+
+      {% if age > 19 %}
+        <h3>Healthy BMI (Adult): 18.5 - 24.9</h3>
+      {%else%}
+        <h3>Healthy BMI (Kids & Teens, ages 2-19):</h3>
+      
+        <p>Requires BMI percentile ranges for evaluation. Find the CDC growth charts for young girls and boys below.</p>
+      
+        <p>Underweight: &lt; 5th percentile</p>
+      
+        <p>Normal: &ge; 5th percentile, &lt; 85th percentile</p>
+ 
+        <p>Overweight: &ge; 85th percentile, &lt; 95th percentile</p>
+ 
+        <p>Obsese: &ge; 95th percentile,</p>
+
+        <a href="https://www.cdc.gov/growthcharts/cdc-charts.htm">CDC Growth Charts</a>
+      {%endif%}
+
     </div>
 
-    <script>
-      const breakdown = {{ vals | tojson }};
-    </script>
-    
-    <script src="/static/js/chart.js"></script>
+    {% endif %}
 
+
+    <br><br><br><br>
+
+    <h2>Diet</h2>
+
+    <h3>Total calories: {{vals[0]}}</h3>
+    <h3>TDEE (total daily energy expenditure): {{stats[3]}}</h3>
+
+
+    <div class="charts">
+
+      {% if food | length > 0 %}
+      <div class = "chart">
+      <canvas id="foodNut"></canvas>
+      </div>
+
+      <script>
+        const breakdown = {{ vals[1:] | tojson }};
+      </script>
+
+      {%else%}
+      <div class = "chart">
+        <img src="/static/apple.jpeg" alt="healthy food">
+      </div>
+      {% endif %}
+
+      <div class = "chart">
+        <canvas id="good"></canvas>
+      </div>
+
+      <script src="/static/js/chart.js"></script>
+
+
+    </div>
 
     <h3>Today's Meal Plan</h3>
       <ul>
         {% for f in food %}
           <li>
-            <form>
             {{f[0]}}  
             <button onclick="delF(this)" data-value="{{f[0]}}">x</button> 
-            </form>
           </li>
         {% endfor %}
       </ul>
           <br>
-          <button onclick="drop()" id = "foodEdit">Edit</button>
+          <button onclick="drop()" id = "foodEdit">Search Foods</button>
           <br>
 
      
@@ -143,19 +218,7 @@
           </div>
         
 
-        <h3>Exercise Preferences</h3>
-        {{exercises}}
-        <form method="POST" action="">
-            {% if d2 %}
-                <button type="submit" name = "exerEdit">Edit</button>
-            {% else %}
-
-          <!-- Can we get this into a dropdown? -->
-                <p>Enter new exercises below:</p>
-                <input type="text" name="idk2" required> 
-                <input type="submit" name="exerSub" value="Submit">
-            {% endif %}
-        </form>
+       
 
 
       <br><br><br><br>

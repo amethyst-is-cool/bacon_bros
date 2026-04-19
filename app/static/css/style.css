@@ -27,3 +27,8 @@
 .menu p:hover {background-color: #969cb0}
   
 .display {display:block;}
+
+.chart{
+
+    max-height: 40%;
+}

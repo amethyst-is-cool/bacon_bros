@@ -151,9 +151,14 @@ def profile():
 
     user = session["username"]
 
+    d = True
+    d2 = True
+
     food = fetch("user_foods", "username = ?", "name", (session["username"],))
+
+    #####
     exer = fetch("users", "username = ?", "username", (session["username"],))[0][0]
-    
+    ####
 
     sex = fetch("users", "username = ?", "sex", (session["username"],))[0][0]
     age = fetch("users", "username = ?", "age", (session["username"],))[0][0]
@@ -176,8 +181,8 @@ def profile():
     else:
         haveInfo = False
 
-    d = True
-    d2 = True
+
+    values = nutDist(session["username"])
 
     if request.method == "POST":
         
@@ -206,17 +211,20 @@ def profile():
             choice = request.form["ch"]
             addFood(choice, session["username"])
             food = fetch("user_foods", "username = ?", "name", (session["username"],))
-            return render_template("profile.html", user = user, d= True, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight, foods = foodsL, sex = sex)
+            values = nutDist(session["username"])
+            return render_template("profile.html", user = user, d= True, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight, foods = foodsL, sex = sex, vals = values[1:])
+
 
         if "del" in request.form:
             choice = request.form["del"]
             deleteFood(choice, session["username"])
             food = fetch("user_foods", "username = ?", "name", (session["username"],))
-            return render_template("profile.html", user = user, d= True, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight, foods = foodsL, sex = sex)
+            values = nutDist(session["username"])
+            return render_template("profile.html", user = user, d= True, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight, foods = foodsL, sex = sex, vals = values[1:])
 
 
 
-    return render_template("profile.html", user = user, d= True, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight, foods = foodsL, sex = sex)
+    return render_template("profile.html", user = user, d= True, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight, foods = foodsL, sex = sex, vals = values[1:])
 
 
 
@@ -307,9 +315,8 @@ def addFood(foodName, user):
     db = get_db()
     c = db.cursor()
     n = getFoodsList("name = ?", "*", (foodName,))
-    print(n[0][0])
     query = "INSERT INTO user_foods (username, name, calories, fat, sugar, protein, fiber, cholesterol) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
-    params = (user, foodName, n[0][0], n[0][1], n[0][2], n[0][3], n[0][4], n[0][5])
+    params = (user, foodName, n[0][1], n[0][2], n[0][3], n[0][4], n[0][5], n[0][6])
     c.execute(query, params)
     db.commit()
     db.close()
@@ -356,8 +363,21 @@ def update_userinfo(user, kind, info):
     db.commit()
     db.close()
 
+def nutDist(user):
+    vls = []
+    totalCals = 0
+    nutrients = ['calories', 'fat', 'sugar', 'protein', 'fiber', 'cholesterol']
+    for i in nutrients:
+        sm = 0
+        lst = fetch("user_foods", "username = ?", i, (user,))
+        for l in lst:
+            sm += l[0]
+        vls += [sm]
+    print(vls)
+    return vls
+
 
 # Flask
 if __name__=='__main__':
-    app.debug = True
+    app.debug = False
     app.run()

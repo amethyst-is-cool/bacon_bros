@@ -53,3 +53,6 @@ function delF(element) {
         window.location.reload();
     });
 }
+
+
+

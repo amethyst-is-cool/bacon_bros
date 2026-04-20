@@ -8,7 +8,8 @@
 </head>
 
 <body>
-
+  
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
     <a class="navbar-brand" href="#">
       <img src="/static/favicon.ico" width="30" height="30" class="d-inline-block align-top">
@@ -38,11 +39,22 @@
         <div class="card shadow-sm h-100">
           <div class="card-body text-center">
             <h4 class="card-title fw-bold mb-3">{{i[0]}}</h4>
-            <canvas id="chart{{ loop.index }}" height="300"></canvas>
+            <canvas 
+              id="chart{{ loop.index }}" 
+              height="300"
+              data-name="{{ i[0] }}"
+              data-values='{{ i[1:] | tojson }}'>
+            </canvas>
           </div>
         </div>
       </div>
-      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <script>
+      const canvas{{loop.index}} = document.getElementById("chart{{ loop.index }}");
+
+      canvas{{loop.index}}.addEventListener("click", function () {
+          newF(this);
+      });
+      </script>
       <script>
         const rawData{{loop.index}} = {{i[1:] | tojson}};
         const adjustedData{{loop.index}} = [...rawData{{loop.index}}];
@@ -82,7 +94,21 @@
       </script>
 
       {% endfor %}
-
+      <script>
+        
+      function newF(element) {
+        const name = element.dataset.name;
+          fetch("/profile", {
+          method: "POST",
+          body: new URLSearchParams({
+              ch: name
+          })
+      })
+      .then(() => {
+        window.location.href = "/profile#results-section";
+      });
+      }
+      </script>
     </div>
   </div>
 

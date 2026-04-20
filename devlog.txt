@@ -85,3 +85,7 @@ alvinS -- 2026-04-18 12:24
     - Removed unnecessary data
     - Added search function to return data by include
     
+andrewT -- 2026-04-20 16:40
+    - Added CSS/FEF to all pages
+    - Added additional functionality to results page to allow users to click and add foods
+    - Fixed a bug with duplicate entries of food preventing the users from deleting food

@@ -88,7 +88,7 @@ function newE(element) {
     fetch("/profile", {
         method: "POST",
         body: new URLSearchParams({
-            chE: value
+            che: value
         })
     })
     .then(() => {
@@ -104,7 +104,7 @@ function delE(element) {
     fetch("/profile", {
         method: "POST",
         body: new URLSearchParams({
-            delE: value
+            dele: value
         })
     })
     .then(() => {

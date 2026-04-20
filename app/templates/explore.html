@@ -13,15 +13,20 @@
     <title>EXPLORE</title>
     <link rel="stylesheet" href="/static/style.css">
     <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
   </head>
   <body>
-    <nav class = "navbar">
-      <form action="/" method="POST"><input type="submit" value="HOME"></form>
-      <form action="/profile" method="POST"><input type="submit" value="PROFILE"></form>
-      <form action="/explore" method="POST"><input type="submit" value="EXPLORE"></form>
-      <form action="/personalize" method="POST"><input type="submit" value="PERSONALIZE"></form>
-      <form action="/logout" method="POST"><input type="submit" value="LOG OUT"></form>
-    </nav>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
+  <span class="navbar-brand fw-bold">Lettuce Relax</span>
+  <div class="ms-auto d-flex gap-2">
+    <form action="/" method="POST"><input class="btn btn-outline-primary" type="submit" value="HOME"></form>
+    <form action="/profile" method="POST"><input class="btn btn-outline-primary" type="submit" value="PROFILE"></form>
+    <form action="/explore" method="POST"><input class="btn btn-outline-primary" type="submit" value="EXPLORE"></form>
+    <form action="/personalize" method="POST"><input class="btn btn-outline-primary" type="submit" value="PERSONALIZE"></form>
+    <form action="/logout" method="POST"><input class="btn btn-outline-danger" type="submit" value="LOG OUT"></form>
+  </div>
+</nav>
 
     <h1>EXPLORE</h1>
 

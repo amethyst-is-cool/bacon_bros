@@ -9,58 +9,85 @@
  -->
 
 <html>
-  <head>
-    <title>HOME</title>
-    <link rel="stylesheet" href="/static/style.css">
-    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-  </head>
-  <body>
-    <nav class = "navbar navbar=expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">
-        <img src="/static/favicon.ico" width="30" height="30" class="d-inline-block align-top" alt="favicon">
-        Lettuce Relax</a>
-      <form class="form-inline" action="/" method="POST"><input class="form-control mr-sm-2" type="submit" value="HOME"></form>
-      <form class="form-inline" action="/profile" method="POST"><input class="form-control mr-sm-2" type="submit" value="PROFILE"></form>
-      <form class="form-inline" action="/explore" method="POST"><input class="form-control mr-sm-2" type="submit" value="EXPLORE"></form>
-      <form class="form-inline" action="/personalize" method="POST"><input class="form-control mr-sm-2" type="submit" value="PERSONALIZE"></form>
-      <form class="form-inline" action="/logout" method="POST"><input class="form-control mr-sm-2" type="submit" value="LOG OUT"></form>
-    </nav>
+<head>
+  <title>HOME</title>
 
-    <h1 class="fs-1 fw-bold">HOME</h1>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
 
-    <p>This website will introduce you to food consumption and exercise worldwide through statistics, focusing on the health of populations. Visitors will be able to learn what food will provide them with what caloric intake, and what exercises they can do to burn off said calories. The site will allow them to craft their own personalized dietary and workout goals, the progression of which will also be displayed with data visualization tools. </p>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
 
-    <div class="container">
-      <div class="row">
-        <div class="col-6">
-          <div class="vstack gap-3 col-md-4 mx-auto">
-            <h3 class="fs-3 fw-bold">EXPLORE A NEW LIFESTYLE</h3>
-            <p class="fs-6 fw-normal">Description of the explore page and how you can compare different exercises to one another</p>
-            <form action="/explore" method="POST"><input type="submit" value="EXPLORE"></form>
-          </div>
-        </div>
-        <div class="col">
-          <img class="img-thumbnail img-fluid" src="https://images.ctfassets.net/0ls885pa980u/51D7qJpfeUkRsKo2qV28eG/b002c9eb38bd6cb253d3c5be7592705e/Inclusive-Fitness-slider-ID-29875643.jpg" alt="image of fitness workout">
-        </div>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
+  <span class="navbar-brand fw-bold">Lettuce Relax</span>
+  <div class="ms-auto d-flex gap-2">
+    <form action="/" method="POST"><input class="btn btn-outline-primary" type="submit" value="HOME"></form>
+    <form action="/profile" method="POST"><input class="btn btn-outline-primary" type="submit" value="PROFILE"></form>
+    <form action="/explore" method="POST"><input class="btn btn-outline-primary" type="submit" value="EXPLORE"></form>
+    <form action="/personalize" method="POST"><input class="btn btn-outline-primary" type="submit" value="PERSONALIZE"></form>
+    <form action="/logout" method="POST"><input class="btn btn-outline-danger" type="submit" value="LOG OUT"></form>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<div class="container text-center mt-5">
+  <h1 class="fw-bold display-4">Welcome to Lettuce Relax</h1>
+  <p class="text-muted fs-5 mt-3">
+    Explore food nutrition and exercise data to build a healthier lifestyle.
+    Track calories, compare workouts, and personalize your fitness goals.
+  </p>
+</div>
+
+<!-- Explore Section -->
+<div class="container mt-5">
+  <div class="row align-items-center g-4">
+
+    <div class="col-md-6">
+      <div class="card shadow-sm p-4 text-center">
+        <h3 class="fw-bold">Explore a New Lifestyle</h3>
+        <p class="text-muted">
+          Compare foods and exercises to better understand how your choices impact your health.
+        </p>
+        <form action="/explore" method="POST">
+          <input class="btn btn-primary mt-2" type="submit" value="EXPLORE">
+        </form>
       </div>
     </div>
 
-    <div class="container">
-      <div class="row">
-        <div class="col">
-          <img class="img-thumbnail img-fluid" src="https://images.ctfassets.net/psi7gc0m4mjv/3iupCMZfasz4PAftfKy3YM/433284f65deed36d7b470e003ceebc03/iStock-475430856-1500wide-min.jpg" alt="image of fitness workout">
-        </div>
-        <div class="col-6">
-          <div class="vstack gap-3 col-md-4 mx-auto">
-            <h3 class="fs-3 fw-bold">PERSONALIZE YOUR FITNESS PLAN</h3>
-            <p class="fs-6 fw-normal">Description of the personalize page and how you can create your own workout plan based off of your meals</p>
-            <form action="/personalize" method="POST"><input type="submit" value="PERSONALIZE"></form>
-          </div>
-        </div>
+    <div class="col-md-6 text-center">
+      <img class="img-fluid rounded shadow-sm"
+        src="https://images.ctfassets.net/0ls885pa980u/51D7qJpfeUkRsKo2qV28eG/b002c9eb38bd6cb253d3c5be7592705e/Inclusive-Fitness-slider-ID-29875643.jpg">
+    </div>
+
+  </div>
+</div>
+
+<!-- Personalize Section -->
+<div class="container mt-5 mb-5">
+  <div class="row align-items-center g-4">
+
+    <div class="col-md-6 text-center">
+      <img class="img-fluid rounded shadow-sm"
+        src="https://images.ctfassets.net/psi7gc0m4mjv/3iupCMZfasz4PAftfKy3YM/433284f65deed36d7b470e003ceebc03/iStock-475430856-1500wide-min.jpg">
+    </div>
+
+    <div class="col-md-6">
+      <div class="card shadow-sm p-4 text-center">
+        <h3 class="fw-bold">Personalize Your Fitness Plan</h3>
+        <p class="text-muted">
+          Build a customized workout and diet plan tailored to your goals and preferences.
+        </p>
+        <form action="/personalize" method="POST">
+          <input class="btn btn-success mt-2" type="submit" value="PERSONALIZE">
+        </form>
       </div>
     </div>
 
+  </div>
+</div>
 
-  </body>
+</body>
 </html>

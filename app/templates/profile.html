@@ -120,7 +120,11 @@
 
       <h2>Results:</h2>
       <h3>BMI: {{stats[0]}}</h3>
+      {% if age > 19 %}
       <h3>Status: {{stats[1]}}</h3>
+      {% else %}
+      <h3>Status: requires percentile range from growth charts (see below)</h3>
+      {%endif%}
       <h3>BMR: {{stats[2]}}</h3>
       <h3>TDEE: {{stats[3]}}</h3>
 

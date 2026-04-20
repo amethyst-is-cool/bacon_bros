@@ -178,7 +178,7 @@ def profile():
         haveInfo = True
         sts = statC(age, weight, height, sex, act)
 
-        ex = fittedE(sex, sts[0], age, weight)
+        ex = fittedE(sex, sts[0], age, weight)[0]
         #sex, bmi, age, weight
         if len(ex) < 1:
             ex = getExerList(True, "name", (), True)
@@ -224,7 +224,7 @@ def profile():
                 haveInfo = True
                 sts = statC(age, weight, height, sex, act)
 
-                ex = fittedE(sex, sts[0], age, weight)
+                ex = fittedE(sex, sts[0], age, weight)[0]
                 if len(ex) < 1:
                     ex = getExerList(True, "name", (), True)
                 #sex, bmi, age, weight
@@ -257,8 +257,9 @@ def profile():
 
 
         if "che" in request.form:
-
-            return render_template("profile.html", user = user, d= True, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight,
+            choice = request.form["che"]
+            addExer(choice, session["username"], ids)
+            return render_template("profile.html", user = user, d= True, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight, 
             foods = foodsL, sex = sex, vals = values, activity = act, stats = sts, exers = exersL)
 
         #deleting food
@@ -379,14 +380,15 @@ def deleteFood(foodName, user):
     return True
 
 
-def addExer(id, user):
+def addExer(name, user, ids):
     db = get_db()
     c = db.cursor()
-    n = getExerList("id = ?", "*", (id,))
+    n = getExerList("id = ?", "*", (name,))
     #id|age|gender|weight|height|session_duration|calories_burned|workout_type|BMI|name|sets|reps|benefit|burns_calories|target_muscle_group|workout
+    #username, age, gender, weight, height, session_duration, calories_burned, workout_type, BMI, name, sets, reps, benefit, burns_calories, target_muscle_group, workout 
 
-    #query = "INSERT INTO user_workouts (username, name, calories, fat, sugar, protein, fiber, cholesterol) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
-   # params = (user, name, n[0][1], n[0][2], n[0][3], n[0][4], n[0][5], n[0][6])
+    query = "INSERT INTO user_exercises (username, age, gender, weight, height, session_duration, calories_burned, workout_type, BMI, name, sets, reps, benefit, burns_calories, target_muscle_group, workout) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+    #params = (user, name, n[0][1], n[0][2], n[0][3], n[0][4], n[0][5], n[0][6])
    #c.execute(query, params)
     db.commit()
     db.close()
@@ -448,13 +450,12 @@ def fittedE(sex, bmi, age, weight):
     weight = weight * 0.453592
     al = getExerList("gender = ? AND age BETWEEN (? - 5) AND (? + 5) AND BMI BETWEEN (? - 2) AND (? + 2) AND weight BETWEEN (? - 5) AND (? + 5)", "name", (sex, age, age, bmi, bmi, weight, weight), True)
     ind = getExerList("gender = ? AND age BETWEEN (? - 5) AND (? + 5) AND BMI BETWEEN (? - 2) AND (? + 2) AND weight BETWEEN (? - 5) AND (? + 5)", "id", (sex, age, age, bmi, bmi, weight, weight), False)
-    #al = getExerList("gender = ? AND BMI BETWEEN (? - 1) AND (? + 1) AND age BETWEEN (? - 5) AND (? + 5) AND weight BETWEEN (? - 5) AND (? + 5)", "name", (sex, bmi, bmi, age, age, weight, weight), True)
+   
     i = []
     for d in ind:
         i += [d[0]]
-    print(i)
-    return al
-
+    return [al, i]
+    
 
 def update_userinfo(user, kind, info):
     db = sqlite3.connect(DB_FILE)

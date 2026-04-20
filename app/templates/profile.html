@@ -55,7 +55,7 @@
 
 
         <h3>What is your height (in)?</h3>
-        {{ height }} cm
+        {{ height }} in
 
         {% if not d %}
         <input type="number" name="height" value = {{height}} required>
@@ -99,12 +99,6 @@
           </fieldset>
         {% endif %}
 
-
-
-
-
-
-
         <br><br>
 
         {% if d %}
@@ -113,8 +107,6 @@
         <button type="submit" name ="newInfo">Submit</button>
         {% endif %}
       
-
-
     </form>
 
 
@@ -155,6 +147,52 @@
     {% endif %}
 
 
+
+
+    {%if d2 %}
+    <br><br><br><br>
+      <h2>Workouts</h2>
+      <h3>Please select your preferred exercises:</h3>
+
+      <ul>
+        {% for w in exer %}
+          <li>
+            {{w[0]}}  
+            <button onclick="delE(this)" data-value="{{w[0]}}">x</button> 
+          </li>
+        {% endfor %}
+      </ul>
+          <br>
+          <button onclick="drop2()" id = "workEdit">Recommended Workouts</button>
+          <br>
+
+     
+          <div class="dropdown1">
+              <div id="dropd2" class="menu">
+                <div class="searchBar" id = 's2'>
+                  <input type="text" placeholder="Search..." id="search2" onkeyup="filter2()">
+                </div>
+                <div id = "options2" class="opt">
+                    {% for e in exers %}
+                    <p onclick ="newE(this)" data-value = "{{e}}">{{e}}</p> 
+                    {% endfor %}
+                </div>
+              </div>
+
+          </div>
+
+    {%endif%}
+
+
+
+
+
+
+
+
+
+
+
     <br><br><br><br>
 
     <h2>Diet</h2>
@@ -189,7 +227,7 @@
 
     </div>
 
-    <h3>Today's Meal Plan</h3>
+    <h3>Today's Meal Plan (each serving accounts for 100g)</h3>
       <ul>
         {% for f in food %}
           <li>
@@ -222,13 +260,13 @@
 
 
       <br><br><br><br>
-
+      <!---
       <div>
         <h3>Want to See Your Personalized Workout Plan?</h3>
         <p>ALALalalalalalaalaalalal</p>
         <form action="/personalize" method="POST"><input type="submit" value="PERSONALIZE"></form>  
 
       </div>
-
+      -->
   </body>
 </html>

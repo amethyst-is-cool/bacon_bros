@@ -158,16 +158,37 @@ def profile():
     d2 = True
 
     food = fetch("user_foods", "username = ?", "name", (session["username"],))
-
-    #####
-    exer = fetch("users", "username = ?", "username", (session["username"],))[0][0]
-    ####
+    exer = fetch("user_exercises", "username = ?", "name", (session["username"],))
+    
 
     sex = fetch("users", "username = ?", "sex", (session["username"],))[0][0]
     age = fetch("users", "username = ?", "age", (session["username"],))[0][0]
     height = fetch("users", "username = ?", "height", (session["username"],))[0][0]
     weight = fetch("users", "username = ?", "weight", (session["username"],))[0][0]
     act = fetch("users", "username = ?", "activity", (session["username"],))[0][0]
+
+
+
+    exersL = []
+    sts = []
+
+    # for checking if BMI, etc. can be calculated
+
+    if height != 0 and age != 0 and weight != 0 and act != "" and sex != "":
+        haveInfo = True
+        sts = statC(age, weight, height, sex, act)
+
+        ex = fittedE(sex, sts[0], age, weight)
+        #sex, bmi, age, weight
+        if len(ex) < 1:
+            ex = getExerList(True, "name", (), True)
+        for i in range(1, len(ex)):
+            exersL += [ex[i][0]]
+
+    else:
+        haveInfo = False
+
+    values = nutDist(session["username"])
 
 
     #for dropdown
@@ -178,17 +199,8 @@ def profile():
     for i in range(1, len(foods)):
         foodsL += [foods[i][0]]
 
-    # for checking if BMI, etc. can be calculated
 
-    if height != 0 and age != 0 and weight != 0 and act != "" and sex != "":
-        haveInfo = True
-        sts = statC(age, weight, height, sex, act)
-    else:
-        haveInfo = False
-        sts = []
-
-
-    values = nutDist(session["username"])
+  
 
     if request.method == "POST":
         
@@ -211,11 +223,19 @@ def profile():
             if height != 0 and age != 0 and weight != 0 and act != "" and sex != "":
                 haveInfo = True
                 sts = statC(age, weight, height, sex, act)
+
+                ex = fittedE(sex, sts[0], age, weight)
+                if len(ex) < 1:
+                    ex = getExerList(True, "name", (), True)
+                #sex, bmi, age, weight
+                for i in range(1, len(ex)):
+                    exersL += [ex[i][0]]
+
             else:
                 haveInfo = False
                 sts = []
-            return render_template("profile.html", user = user, d= d, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight, 
-            foods = foodsL, sex = sex, vals = values, activity = act, stats = sts)
+            return render_template("profile.html", user = user, d= True, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight, 
+            foods = foodsL, sex = sex, vals = values, activity = act, stats = sts, exers = exersL)
 
         #adding food
         if "ch" in request.form:
@@ -224,7 +244,7 @@ def profile():
             food = fetch("user_foods", "username = ?", "name", (session["username"],))
             values = nutDist(session["username"])
             return render_template("profile.html", user = user, d= True, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight, 
-            foods = foodsL, sex = sex, vals = values, activity = act, stats = sts)
+            foods = foodsL, sex = sex, vals = values, activity = act, stats = sts, exers = exersL)
 
         #deleting food
         if "del" in request.form:
@@ -232,12 +252,24 @@ def profile():
             deleteFood(choice, session["username"])
             values = nutDist(session["username"])
             food = fetch("user_foods", "username = ?", "name", (session["username"],))
-            return render_template("profile.html", user = user, d= True, d2 = True, food = food, exercises = exer, age = age, height = height, weight = weight, 
-            foods = foodsL, sex = sex, vals = values, activity = act, stats = sts)
+            return render_template("profile.html", user = user, d= True, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight, 
+            foods = foodsL, sex = sex, vals = values, activity = act, stats = sts, exers = exersL)
+
+
+        if "che" in request.form:
+            
+            return render_template("profile.html", user = user, d= True, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight, 
+            foods = foodsL, sex = sex, vals = values, activity = act, stats = sts, exers = exersL)
+
+        #deleting food
+        if "dele" in request.form:
+            
+            return render_template("profile.html", user = user, d= True, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight, 
+            foods = foodsL, sex = sex, vals = values, activity = act, stats = sts, exers = exersL)
 
 
     return render_template("profile.html", user = user, d= True, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight, 
-    foods = foodsL, sex = sex, vals = values, activity = act, stats = sts)
+    foods = foodsL, sex = sex, vals = values, activity = act, stats = sts, exers = exersL)
 
 
 
@@ -345,6 +377,30 @@ def deleteFood(foodName, user):
     db.close()
     return True
 
+
+def addExer(id, user):
+    db = get_db()
+    c = db.cursor()
+    n = getExerList("id = ?", "*", (id,))
+    #id|age|gender|weight|height|session_duration|calories_burned|workout_type|BMI|name|sets|reps|benefit|burns_calories|target_muscle_group|workout
+
+    #query = "INSERT INTO user_workouts (username, name, calories, fat, sugar, protein, fiber, cholesterol) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+   # params = (user, name, n[0][1], n[0][2], n[0][3], n[0][4], n[0][5], n[0][6])
+   #c.execute(query, params)
+    db.commit()
+    db.close()
+    return True
+
+def deleteExer(id, user):
+    db = get_db()
+    c = db.cursor()
+    query = "DELETE FROM user_exercises WHERE username = ? AND id = ?"
+    params = (user, id)
+    c.execute(query, params)
+    db.commit()
+    db.close()
+    return True
+
 def fetch(table, criteria, data, params=()):
     db = get_db()
     c = db.cursor()
@@ -369,8 +425,36 @@ def getFoodsList(criteria, data, params=()):
     db.close()
     return data
 
+def getExerList(criteria, data, params=(), cleaned=False):
+    DB_FILE = "static/workout.db"
+    conn = sqlite3.connect(DB_FILE)
+    conn.row_factory = sqlite3.Row
+    #conn.execute("PRAGMA foreign_keys = ON;")
+    db = conn
+    c = db.cursor()
+    if cleaned:
+        query = f"SELECT DISTINCT REPLACE(LOWER({data}), '-', ' ') FROM workouts WHERE {criteria}"
+    else:
+        query = f"SELECT {data} FROM workouts WHERE {criteria}"
+    c.execute(query, params)
+    data = c.fetchall()
+    db.commit()
+    db.close()
+    return data
 
+def fittedE(sex, bmi, age, weight):
+    #gender, BMI, age, weight
+    weight = weight * 0.453592
+    al = getExerList("gender = ? AND age BETWEEN (? - 5) AND (? + 5) AND BMI BETWEEN (? - 2) AND (? + 2) AND weight BETWEEN (? - 5) AND (? + 5)", "name", (sex, age, age, bmi, bmi, weight, weight), True)
+    ind = getExerList("gender = ? AND age BETWEEN (? - 5) AND (? + 5) AND BMI BETWEEN (? - 2) AND (? + 2) AND weight BETWEEN (? - 5) AND (? + 5)", "id", (sex, age, age, bmi, bmi, weight, weight), False)
+    #al = getExerList("gender = ? AND BMI BETWEEN (? - 1) AND (? + 1) AND age BETWEEN (? - 5) AND (? + 5) AND weight BETWEEN (? - 5) AND (? + 5)", "name", (sex, bmi, bmi, age, age, weight, weight), True)
+    i = []
+    for d in ind:
+        i += [d[0]]
+    print(i)
+    return al
     
+
 def update_userinfo(user, kind, info):
     db = sqlite3.connect(DB_FILE)
     c = db.cursor()
@@ -387,7 +471,6 @@ def nutDist(user):
         for l in lst:
             sm += l[0]
         vls += [sm]
-    print(vls)
     return vls
 
 def statC(age, weight, height, sex, act):

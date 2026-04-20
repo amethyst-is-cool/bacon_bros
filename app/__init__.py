@@ -280,9 +280,45 @@ def explore():
     if "username" not in session:
         return redirect("/login")
 
-    return render_template("chart.html", labels = ["test1", "test2", "test3", "test4", "test5"], values = [5, 10, 15, 25, 30])
+    data = sqlite3.connect('static/workout.db')
+    cursor = data.cursor()
 
+    cursor.execute("""
+        SELECT gender, age, BMI, workout 
+        FROM workouts
+    """)
 
+    rows = cursor.fetchall()
+    data.close()
+
+    male = []
+    female = []
+
+    for row in rows:
+        gender = row[0]
+        weight = row[1]
+        bmi = row[2]
+        workout = row[3]
+
+        try:
+            weight = float(weight)
+            bmi = float(bmi)
+        except (ValueError, TypeError):
+            # Skip rows like "Weight (kg)" or NULL values
+            continue
+
+        point = {
+            "x": weight,
+            "y": bmi,
+            "label": workout
+        }
+
+        if gender == "Male":
+            male.append(point)
+        elif gender == "Female":
+            female.append(point)
+
+    return render_template("explore.html", male=male, female=female)
 
 
 #personalize is responsible for displaying info about your food and exerc preferences

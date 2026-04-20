@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-
 <!--
   Veronika Duvanova, Naomi Kurian, Alvin Sze, Andrew Tsai  Bacon Bros
   SoftDev
@@ -7,53 +5,79 @@
   2026 - 3 - 30
   time spent: 1
  -->
-
+  <!DOCTYPE html>
 <html>
-  <head>
-    <title>EXPLORE</title>
-    <link rel="stylesheet" href="/static/style.css">
-    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+<head>
+  <title>HOME</title>
+
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-  </head>
-  <body>
+</head>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
-  <span class="navbar-brand fw-bold">Lettuce Relax</span>
-  <div class="ms-auto d-flex gap-2">
-    <form action="/" method="POST"><input class="btn btn-outline-primary" type="submit" value="HOME"></form>
-    <form action="/profile" method="POST"><input class="btn btn-outline-primary" type="submit" value="PROFILE"></form>
-    <form action="/explore" method="POST"><input class="btn btn-outline-primary" type="submit" value="EXPLORE"></form>
-    <form action="/personalize" method="POST"><input class="btn btn-outline-primary" type="submit" value="PERSONALIZE"></form>
-    <form action="/logout" method="POST"><input class="btn btn-outline-danger" type="submit" value="LOG OUT"></form>
-  </div>
-</nav>
+<body>
 
-    <h1>EXPLORE</h1>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
+    <span class="navbar-brand fw-bold">Lettuce Relax</span>
+    <div class="ms-auto d-flex gap-2">
+      <form action="/" method="POST"><input class="btn btn-outline-primary" type="submit" value="HOME"></form>
+      <form action="/profile" method="POST"><input class="btn btn-outline-primary" type="submit" value="PROFILE"></form>
+      <form action="/explore" method="POST"><input class="btn btn-outline-primary" type="submit" value="EXPLORE"></form>
+      <form action="/personalize" method="POST"><input class="btn btn-outline-primary" type="submit" value="PERSONALIZE"></form>
+      <form action="/logout" method="POST"><input class="btn btn-outline-danger" type="submit" value="LOG OUT"></form>
+    </div>
+  </nav>
 
+  <div class="container text-center mt-5 mb-5">
 
-    <div>
-        <h3>Know what to look for:</h3>
-        <p>Elaborate on how this graph is a bar graph that shows a trend across all exercises through comparing one variable selected from dropdown menu</p>
+    <h1 class="fw-bold display-4">Nutrition</h1>
+    <p class="text-muted fs-5">Find data on your favorite foods!</p>
 
-        <!-- Insert dropdown and graph -->
+    <div class="card shadow-sm mt-4 p-4 mx-auto" style="max-width: 500px;">
+
+      <form action="{{ url_for('results')}}" method="get">
+
+        <div class="mb-3">
+          <input type="text"
+            name="search_query"
+            placeholder="Search up..."
+            class="form-control form-control-lg"
+            required>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">
+          SEARCH
+        </button>
+
+      </form>
 
     </div>
 
-    <div>
-        <h3>Know the goal of an exercise:</h3>
-        <p>Elaborate on how this graph is a strength/polygon graph that shows numerical values of a chosen workout from dropdown menu</p>
+    <div class="mt-5 mb-5"></div>    
 
-        <!-- Insert dropdown and graph -->
+    <div class="container text-center mt-5 mb-5">
+
+      <h1 class="fw-bold display-4 pt-[200px]">Trends of Life</h1>
+      <p class="text-muted fs-5">Let's take a look at the trend that our collection of exercise data offers us:</p>
+      <p class="text-muted fs-8">Did you know that as you age, your BMI is on track to increase? Take action through our website by finding the optimal combination of meals and exercises to brun calories and target your nutrition goals!</p>
+
+
+      <div class="card shadow-sm mt-4 p-4 mx-auto" style="max-width: 1000px; min-height: 500px;">
+        <div>
+            <canvas id="scatterChart"></canvas>
+            <button id="toggleBtn">Show Female</button>
+
+            <script>
+                const maleData = {{ male | default([]) | tojson }};
+                const femaleData = {{ female | default([]) | tojson }};
+            </script>
+        </div>
+      </div>  
 
     </div>
 
-    <div>
-        <h3>Compare the two:</h3>
-        <p>Elaborate on how this graph is a line graph that compares the stats of two exercises</p>
+    <script src="/static/js/explore.js"></script>
 
-        <!-- Insert dropdown and graph -->
-
-    </div>
-
-  </body>
+</body>
 </html>

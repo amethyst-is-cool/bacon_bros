@@ -5,37 +5,35 @@
 </title>
 </head>
 <body>
-{{foods}}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 {% for i in foods %}
-<canvas id={{foods[0]}} width = "200" height = "200"></canvas>
-{% endfor %}
+{{i[0]}}
+<canvas id="chart{{ loop.index }}" width = "400" height = "400"></canvas>
+<br>
 <script>
-const data = {
-  labels: {{labels | tojson}},
+const data{{loop.index}} = {
+  labels: {{params | tojson}},
   datasets: [{
     label: 'Food',
-    data: {{values | tojson}},
+    data: {{i[1:] | tojson}},
     backgroundColor: 'rgba(54, 162, 235, 0.2)',
     borderColor: 'rgba(54, 162, 235, 1)',
     borderWidth: 2
   }]
 };
 
-const config = {
+const config{{loop.index}} = {
   type: 'radar',
-  data: data,
+  data: data{{loop.index}},
   options: {
-    scales: {
-      r: {
-        beginAtZero: true
-      }
-    }
+    responsive: false,
+    maintainAspectRatio: false
   }
 };
 
-const ctx = document.getElementById('myRadarChart').getContext('2d');
-new Chart(ctx, config);
+const ctx{{loop.index}} = document.getElementById("chart{{ loop.index }}").getContext('2d');
+new Chart(ctx{{loop.index}}, config{{loop.index}});
 </script>
+{% endfor %}
 </body>
 </html>

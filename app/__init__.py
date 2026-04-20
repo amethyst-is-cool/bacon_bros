@@ -159,7 +159,7 @@ def profile():
 
     food = fetch("user_foods", "username = ?", "name", (session["username"],))
     exer = fetch("user_exercises", "username = ?", "name", (session["username"],))
-    
+
 
     sex = fetch("users", "username = ?", "sex", (session["username"],))[0][0]
     age = fetch("users", "username = ?", "age", (session["username"],))[0][0]
@@ -200,25 +200,25 @@ def profile():
         foodsL += [foods[i][0]]
 
 
-  
+
 
     if request.method == "POST":
-        
-        
+
+
         if "infoEdit" in request.form:
-            return render_template("profile.html", user = user, d= False, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight, 
+            return render_template("profile.html", user = user, d= False, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight,
             foods = foodsL, sex = sex, vals = values[1:], activity = act, stats = sts)
-       
+
         if "newInfo" in request.form:
             update_userinfo(session["username"], "age", request.form["age"])
             age = fetch("users", "username = ?", "age", (session["username"],))[0][0]
             update_userinfo(session["username"], "weight", request.form["weight"])
             weight = fetch("users", "username = ?", "weight", (session["username"],))[0][0]
-            update_userinfo(session["username"], "height", request.form["height"])   
+            update_userinfo(session["username"], "height", request.form["height"])
             height = fetch("users", "username = ?", "height", (session["username"],))[0][0]
-            update_userinfo(session["username"], "sex", request.form["sex"])   
+            update_userinfo(session["username"], "sex", request.form["sex"])
             sex = fetch("users", "username = ?", "sex", (session["username"],))[0][0]
-            update_userinfo(session["username"], "activity", request.form["act"])   
+            update_userinfo(session["username"], "activity", request.form["act"])
             act = fetch("users", "username = ?", "activity", (session["username"],))[0][0]
             if height != 0 and age != 0 and weight != 0 and act != "" and sex != "":
                 haveInfo = True
@@ -234,7 +234,7 @@ def profile():
             else:
                 haveInfo = False
                 sts = []
-            return render_template("profile.html", user = user, d= True, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight, 
+            return render_template("profile.html", user = user, d= True, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight,
             foods = foodsL, sex = sex, vals = values, activity = act, stats = sts, exers = exersL)
 
         #adding food
@@ -243,7 +243,7 @@ def profile():
             addFood(choice, session["username"])
             food = fetch("user_foods", "username = ?", "name", (session["username"],))
             values = nutDist(session["username"])
-            return render_template("profile.html", user = user, d= True, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight, 
+            return render_template("profile.html", user = user, d= True, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight,
             foods = foodsL, sex = sex, vals = values, activity = act, stats = sts, exers = exersL)
 
         #deleting food
@@ -252,23 +252,23 @@ def profile():
             deleteFood(choice, session["username"])
             values = nutDist(session["username"])
             food = fetch("user_foods", "username = ?", "name", (session["username"],))
-            return render_template("profile.html", user = user, d= True, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight, 
+            return render_template("profile.html", user = user, d= True, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight,
             foods = foodsL, sex = sex, vals = values, activity = act, stats = sts, exers = exersL)
 
 
         if "che" in request.form:
-            
-            return render_template("profile.html", user = user, d= True, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight, 
+
+            return render_template("profile.html", user = user, d= True, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight,
             foods = foodsL, sex = sex, vals = values, activity = act, stats = sts, exers = exersL)
 
         #deleting food
         if "dele" in request.form:
-            
-            return render_template("profile.html", user = user, d= True, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight, 
+
+            return render_template("profile.html", user = user, d= True, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight,
             foods = foodsL, sex = sex, vals = values, activity = act, stats = sts, exers = exersL)
 
 
-    return render_template("profile.html", user = user, d= True, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight, 
+    return render_template("profile.html", user = user, d= True, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight,
     foods = foodsL, sex = sex, vals = values, activity = act, stats = sts, exers = exersL)
 
 
@@ -347,6 +347,7 @@ def personalize():
 def results():
     if "username" not in session:
         return redirect("/login")
+    print(data.searchFood(request.args['search_query']))
     return render_template("results.html", params = ["calories", "fat", "sugar", "protein", "fiber", "cholesterol"], query = request.args['search_query'], foods = data.searchFood(request.args['search_query']))
 
 
@@ -453,7 +454,7 @@ def fittedE(sex, bmi, age, weight):
         i += [d[0]]
     print(i)
     return al
-    
+
 
 def update_userinfo(user, kind, info):
     db = sqlite3.connect(DB_FILE)

@@ -8,7 +8,7 @@
 </head>
 
 <body>
-  
+
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
     <a class="navbar-brand" href="#">
@@ -39,8 +39,8 @@
         <div class="card shadow-sm h-100">
           <div class="card-body text-center">
             <h4 class="card-title fw-bold mb-3">{{i[0]}}</h4>
-            <canvas 
-              id="chart{{ loop.index }}" 
+            <canvas
+              id="chart{{ loop.index }}"
               height="300"
               data-name="{{ i[0] }}"
               data-values='{{ i[1:] | tojson }}'>
@@ -56,15 +56,13 @@
       });
       </script>
       <script>
-        const rawData{{loop.index}} = {{i[1:] | tojson}};
-        const adjustedData{{loop.index}} = [...rawData{{loop.index}}];
-        adjustedData{{loop.index}}[0] = adjustedData{{loop.index}}[0] / 10;
+        const rawData{{loop.index}} = {{i[2:] | tojson}};
 
         const data{{loop.index}} = {
-          labels: {{params | tojson}},
+          labels: {{params[1:] | tojson}},
           datasets: [{
             label: 'Food',
-            data: adjustedData{{loop.index}},
+            data: rawData{{loop.index}},
             backgroundColor: 'rgba(54, 162, 235, 0.2)',
             borderColor: 'rgba(54, 162, 235, 1)',
             borderWidth: 2
@@ -95,7 +93,7 @@
 
       {% endfor %}
       <script>
-        
+
       function newF(element) {
         const name = element.dataset.name;
           fetch("/profile", {

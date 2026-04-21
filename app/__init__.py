@@ -204,7 +204,7 @@ def profile():
 
         if "infoEdit" in request.form:
             return render_template("profile.html", user = user, d= False, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight,
-            foods = foodsL, sex = sex, vals = values[1:], activity = act, stats = sts)
+            foods = foodsL, sex = sex, vals = values, activity = act, stats = sts)
 
         if "newInfo" in request.form:
             update_userinfo(session["username"], "age", request.form["age"])
@@ -354,10 +354,16 @@ def personalize():
     for i in range(len(exercise)):
         exercise[i] = exercise[i] + " " + str(round(perMin[i], 2)) + " cal/min"
     
+    values = nutDist(session["username"])
+
+    if len(values) > 0:
+        total = values[0]
+    else:
+        total = 0
+
 
     if height != 0 and age != 0 and weight != 0 and act != "" and sex != "":
         sts = statC(age, weight, height, sex, act)
-        total = sts[0]
         tdee = sts[3]
     else:
         total = 0

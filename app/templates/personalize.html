@@ -30,6 +30,12 @@
   </div>
 </nav>
 
+<script>
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+  </script>
+
 <div class="container mt-5">
 
   <div class="text-center mb-5">
@@ -47,6 +53,7 @@
     <br>
     <h3 class="fw-bold mb-3">Target Deficit: {{500 * loss[0][0]}}</h3>
 
+  
 
   <div class="row g-4">
 

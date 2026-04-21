@@ -354,8 +354,9 @@ def personalize():
     for i in range(len(exercise)):
         exercise[i] = exercise[i] + " " + str(round(perMin[i], 2)) + " cal/min"
     
-    sts = statC(age, weight, height, sex, act)
-    if len(sts) > 0:
+
+    if height != 0 and age != 0 and weight != 0 and act != "" and sex != "":
+        sts = statC(age, weight, height, sex, act)
         total = sts[0]
         tdee = sts[3]
     else:

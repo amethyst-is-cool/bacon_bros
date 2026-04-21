@@ -458,7 +458,7 @@ def addFood(foodName, user):
     db.commit()
     db.close()
     return True
-    
+
 def deleteFood(foodName, user):
     db = get_db()
     c = db.cursor()
@@ -589,12 +589,14 @@ def statC(age, weight, height, sex, act):
 
     kgW = 0.453592 * weight
     cmH = 2.54 * height
+
+    
     if sex == "Male":
         bmr = (10 * kgW) + (6.25 * cmH) - (5 * age) + 5
     if sex == "Female":
         bmr = (10 * kgW) + (6.25 * cmH) - (5 * age) -161
-    else:
-        bmr = ((10 * kgW) + (6.25 * cmH) - (5 * age) + 5) + ((10 * kgW) + (6.25 * cmH) - (5 * age) -161) / 2
+    elif sex != "Female" and sex != "Male":
+        bmr = (((10 * kgW) + (6.25 * cmH) - (5 * age) + 5) + ((10 * kgW) + (6.25 * cmH) - (5 * age) -161)) / 2
 
     if act == "Sedentary":
         tdee = bmr * 1.2
@@ -604,7 +606,7 @@ def statC(age, weight, height, sex, act):
         tdee = bmr * 1.55
     if act == "Very Active":
         tdee = bmr * 1.725
-    else:
+    if act == "Extra Active":
         tdee = bmr * 1.9
 
     l = [round(bmi, 2), status, round(bmr, 2), round(tdee, 2)]

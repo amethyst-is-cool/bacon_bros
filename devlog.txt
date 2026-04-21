@@ -89,3 +89,9 @@ andrewT -- 2026-04-20 16:40
     - Added CSS/FEF to all pages
     - Added additional functionality to results page to allow users to click and add foods
     - Fixed a bug with duplicate entries of food preventing the users from deleting food
+
+alvinS -- 2026-04-20 20:45
+* MOVING THINGS AROUND
+    - Moved search to explore
+    - Slight change to profile
+    - Remove pycache, user database, and prints

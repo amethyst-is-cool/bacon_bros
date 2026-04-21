@@ -258,7 +258,7 @@ def profile():
 
         if "che" in request.form:
             choice = request.form["che"]
-            addExer(choice, session["username"], ids)
+            addExer(choice, session["username"], id)
             return render_template("profile.html", user = user, d= True, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight, 
             foods = foodsL, sex = sex, vals = values, activity = act, stats = sts, exers = exersL)
 
@@ -386,7 +386,7 @@ def personalize():
 def results():
     if "username" not in session:
         return redirect("/login")
-    print(data.searchFood(request.args['search_query']))
+    #print(data.searchFood(request.args['search_query']))
     return render_template("results.html", params = ["calories", "fat", "sugar", "protein", "fiber", "cholesterol"], query = request.args['search_query'], foods = data.searchFood(request.args['search_query']))
 
 

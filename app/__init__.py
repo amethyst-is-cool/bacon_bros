@@ -273,8 +273,6 @@ def profile():
     foods = foodsL, sex = sex, vals = values, activity = act, stats = sts, exers = exersL)
 
 
-
-
 @app.route('/explore', methods=["GET", "POST"])
 def explore():
     if "username" not in session:
@@ -284,7 +282,7 @@ def explore():
     cursor = data.cursor()
 
     cursor.execute("""
-        SELECT gender, age, BMI, workout 
+        SELECT age, gender, weight, workout 
         FROM workouts
     """)
 
@@ -295,27 +293,31 @@ def explore():
     female = []
 
     for row in rows:
-        gender = row[0]
-        weight = row[1]
-        bmi = row[2]
+        age = row[0]
+        gender = str(row[1]).strip().lower()
+        weight = row[2]
         workout = row[3]
 
         try:
+            age = float(age)
             weight = float(weight)
-            bmi = float(bmi)
+
+            # Skip invalid values
+            if age <= 0 or weight <= 0:
+                continue
+
         except (ValueError, TypeError):
-            # Skip rows like "Weight (kg)" or NULL values
             continue
 
         point = {
-            "x": weight,
-            "y": bmi,
+            "x": age,
+            "y": weight,
             "label": workout
         }
 
-        if gender == "Male":
+        if gender == "male":
             male.append(point)
-        elif gender == "Female":
+        elif gender == "female":
             female.append(point)
 
     return render_template("explore.html", male=male, female=female)

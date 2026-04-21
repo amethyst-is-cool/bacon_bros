@@ -74,4 +74,4 @@ def searchWorkout(id):
     x = cursor.fetchall()
     return x
 
-print(searchWorkout(1))
+#print(searchWorkout(1))

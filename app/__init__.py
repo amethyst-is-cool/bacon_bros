@@ -31,7 +31,8 @@ CREATE TABLE IF NOT EXISTS users (
     weight INT,
     height INT,
     sex TEXT,
-    activity TEXT
+    activity TEXT,
+    loss INT
 )
 """)
 
@@ -51,7 +52,7 @@ CREATE TABLE IF NOT EXISTS user_foods (
 
 c.execute("""
 CREATE TABLE IF NOT EXISTS user_exercises (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER,
     username TEXT,
     age INT,
     gender TEXT,
@@ -72,11 +73,6 @@ CREATE TABLE IF NOT EXISTS user_exercises (
 """)
 
 
-c.execute("""
-INSERT INTO user_exercises
-(username, age, gender, weight, height, session_duration, calories_burned, workout_type, BMI, name, sets, reps, benefit, burns_calories, target_muscle_group, workout )
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-""", ('a', 0, "male", 0.3, 1.9, 0.5, 4.4, "abs", 9.0, "crunch", 9, 2, "good", 20.3, "gut", "lala"))
 
 db.commit()
 db.close()
@@ -126,7 +122,7 @@ def register():
             db = sqlite3.connect(DB_FILE)
             c = db.cursor()
             c.execute(
-                "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                 (
                     request.form["username"],
                     request.form["password"],
@@ -134,7 +130,8 @@ def register():
                     0,
                     0,
                     "",
-                    ""
+                    "",
+                    0
                 )
             )
             db.commit()
@@ -181,7 +178,7 @@ def profile():
         ex = fittedE(sex, sts[0], age, weight)[0]
         #sex, bmi, age, weight
         if len(ex) < 1:
-            ex = getExerList(True, "name", (), True)
+            ex = [] #getExerList(True, "name", (), True)
         for i in range(1, len(ex)):
             exersL += [ex[i][0]]
 
@@ -226,7 +223,8 @@ def profile():
 
                 ex = fittedE(sex, sts[0], age, weight)[0]
                 if len(ex) < 1:
-                    ex = getExerList(True, "name", (), True)
+                    ex = [] #getExerList(True, "name", (), True)
+
                 #sex, bmi, age, weight
                 for i in range(1, len(ex)):
                     exersL += [ex[i][0]]
@@ -258,12 +256,18 @@ def profile():
 
         if "che" in request.form:
             choice = request.form["che"]
-            addExer(choice, session["username"], id)
+            ids = fittedE(sex, sts[0], age, weight)[1]
+            addExer(choice, session["username"], ids)
+            exer = fetch("user_exercises", "username = ?", "name", (session["username"],)) 
+
             return render_template("profile.html", user = user, d= True, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight, 
             foods = foodsL, sex = sex, vals = values, activity = act, stats = sts, exers = exersL)
 
         #deleting food
         if "dele" in request.form:
+            choice = request.form["dele"]
+            deleteExer(choice, session["username"])
+            exer = fetch("user_exercises", "username = ?", "name", (session["username"],)) 
 
             return render_template("profile.html", user = user, d= True, d2 = haveInfo, food = food, exercises = exer, age = age, height = height, weight = weight,
             foods = foodsL, sex = sex, vals = values, activity = act, stats = sts, exers = exersL)
@@ -329,6 +333,42 @@ def personalize():
     if "username" not in session:
         return redirect("/login")
 
+    sex = fetch("users", "username = ?", "sex", (session["username"],))[0][0]
+    age = fetch("users", "username = ?", "age", (session["username"],))[0][0]
+    height = fetch("users", "username = ?", "height", (session["username"],))[0][0]
+    weight = fetch("users", "username = ?", "weight", (session["username"],))[0][0]
+    act = fetch("users", "username = ?", "activity", (session["username"],))[0][0]
+
+
+    food = fetch("user_foods", "username = ?", "name", (session["username"],))
+    exercises = fetch("user_exercises", "username = ?", "name, session_duration, calories_burned", (session["username"],))
+
+    exercise = []
+    for i in range(len(exercises)):
+        exercise += [exercises[i][0]]
+
+    perMin = []
+    for i in range(len(exercises)):
+        perMin += [((exercises[i][2]) / ((exercises[i][1]) * 60))]
+
+    for i in range(len(exercise)):
+        exercise[i] = exercise[i] + " " + str(round(perMin[i], 2)) + " cal/min"
+    
+    sts = statC(age, weight, height, sex, act)
+    if len(sts) > 0:
+        total = sts[0]
+        tdee = sts[3]
+    else:
+        total = 0
+        tdee = 0
+
+    loss = fetch("users", "username = ?", "loss", (session["username"],))
+    
+    if request.method == 'POST':
+        if 'pound' in request.form:
+            addLoss(request.form["pound"], session["username"])
+
+    '''
     #have to tap into db again to get the user preferences tables to be able to rmv some
     db = get_db()
     c = db.cursor()
@@ -342,6 +382,7 @@ def personalize():
         WHERE username = ?
     """, (user,)).fetchall()
 
+    
     #temporary pull of exers
     exer = c.execute("""
         SELECT username, age, gender, weight, height, session_duration, calories_burned, workout_type, BMI, name, sets, reps, benefit, burns_calories, target_muscle_group, workout
@@ -349,19 +390,19 @@ def personalize():
         WHERE username = ?
     """, (user,)).fetchall()
 
-    #if the button is pressed to remove that food from list
+        #if the button is pressed to remove that food from list
     if request.method == 'POST':
         if request.form.get("action") == "remove_food":
             food_name = request.form.get("food_name")
 
             c.execute("""
                 DELETE FROM user_foods
-                WHERE username = ? AND name = ?
+                 WHERE username = ? AND name = ?
             """, (user, food_name))
 
-            db.commit()
-            db.close()
-            return redirect("/personalize")
+                db.commit()
+                db.close()
+                return redirect("/personalize")
 
     if request.method == 'POST':
         if request.form.get("action") == "remove_exercise":
@@ -375,11 +416,10 @@ def personalize():
             db.commit()
             db.close()
             return redirect("/personalize")
+    '''
 
-
-    db.commit()
-    db.close()
-    return render_template("personalize.html", user=user, food=food, exercise=exer)
+    
+    return render_template("personalize.html", food = food, exercise = exercise, total = total, tdee = tdee, loss = loss)
 
 
 @app.route("/results", methods=["GET","POST"])
@@ -396,6 +436,17 @@ def logout():
     session.clear()
     return redirect("/login")
 
+def addLoss(pound, user):
+    db = get_db()
+    c = db.cursor()
+    pound = int(pound)
+    query = "UPDATE users SET loss = ? WHERE username = ?"
+    params = (pound, user)
+    c.execute(query, params)
+    db.commit()
+    db.close()
+    return True
+
 def addFood(foodName, user):
     db = get_db()
     c = db.cursor()
@@ -406,7 +457,7 @@ def addFood(foodName, user):
     db.commit()
     db.close()
     return True
-
+'''
 def deleteFood(foodName, user):
     db = get_db()
     c = db.cursor()
@@ -424,27 +475,30 @@ WHERE rowid IN (
     db.commit()
     db.close()
     return True
-
+'''
 
 def addExer(name, user, ids):
     db = get_db()
     c = db.cursor()
-    n = getExerList("id = ?", "*", (name,))
+    i = ",".join(["?"] * len(ids))
+    q = f"name = ? AND id IN ({i}) LIMIT 1"
+    params = tuple([name] + ids)
+    n = getExerList(q, "*", params, False)
+    print(n)
     #id|age|gender|weight|height|session_duration|calories_burned|workout_type|BMI|name|sets|reps|benefit|burns_calories|target_muscle_group|workout
     #username, age, gender, weight, height, session_duration, calories_burned, workout_type, BMI, name, sets, reps, benefit, burns_calories, target_muscle_group, workout 
-
-    query = "INSERT INTO user_exercises (username, age, gender, weight, height, session_duration, calories_burned, workout_type, BMI, name, sets, reps, benefit, burns_calories, target_muscle_group, workout) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-    #params = (user, name, n[0][1], n[0][2], n[0][3], n[0][4], n[0][5], n[0][6])
-   #c.execute(query, params)
+    query = "INSERT INTO user_exercises (id, username, age, gender, weight, height, session_duration, calories_burned, workout_type, BMI, name, sets, reps, benefit, burns_calories, target_muscle_group, workout) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+    params = (n[0][0], user, n[0][1], n[0][2], n[0][3], n[0][4], n[0][5], n[0][6], n[0][7], n[0][8], n[0][9], n[0][10], n[0][11], n[0][12], n[0][13], n[0][14], n[0][15])
+    c.execute(query, params)
     db.commit()
     db.close()
     return True
 
-def deleteExer(id, user):
+def deleteExer(name, user):
     db = get_db()
     c = db.cursor()
-    query = "DELETE FROM user_exercises WHERE username = ? AND id = ?"
-    params = (user, id)
+    query = "DELETE FROM user_exercises WHERE username = ? AND name = ? LIMIT 1"
+    params = (user, name)
     c.execute(query, params)
     db.commit()
     db.close()
@@ -482,9 +536,13 @@ def getExerList(criteria, data, params=(), cleaned=False):
     db = conn
     c = db.cursor()
     if cleaned:
-        query = f"SELECT DISTINCT REPLACE(LOWER({data}), '-', ' ') FROM workouts WHERE {criteria}"
+        query = f"SELECT DISTINCT {data} FROM workouts WHERE {criteria}"
     else:
+        print("Getiing one")
+        print(criteria)
+        print(params)
         query = f"SELECT {data} FROM workouts WHERE {criteria}"
+
     c.execute(query, params)
     data = c.fetchall()
     db.commit()
@@ -495,11 +553,12 @@ def fittedE(sex, bmi, age, weight):
     #gender, BMI, age, weight
     weight = weight * 0.453592
     al = getExerList("gender = ? AND age BETWEEN (? - 5) AND (? + 5) AND BMI BETWEEN (? - 2) AND (? + 2) AND weight BETWEEN (? - 5) AND (? + 5)", "name", (sex, age, age, bmi, bmi, weight, weight), True)
-    ind = getExerList("gender = ? AND age BETWEEN (? - 5) AND (? + 5) AND BMI BETWEEN (? - 2) AND (? + 2) AND weight BETWEEN (? - 5) AND (? + 5)", "id", (sex, age, age, bmi, bmi, weight, weight), False)
-   
+    ind = getExerList("gender = ? AND age BETWEEN (? - 5) AND (? + 5) AND BMI BETWEEN (? - 2) AND (? + 2) AND weight BETWEEN (? - 5) AND (? + 5)", "id", (sex, age, age, bmi, bmi, weight, weight), True)
+    
     i = []
     for d in ind:
         i += [d[0]]
+    print(i)
     return [al, i]
     
 

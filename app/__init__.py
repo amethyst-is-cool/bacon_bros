@@ -457,25 +457,16 @@ def addFood(foodName, user):
     db.commit()
     db.close()
     return True
-'''
+    
 def deleteFood(foodName, user):
     db = get_db()
     c = db.cursor()
-    query = """
-DELETE FROM user_foods
-WHERE rowid IN (
-    SELECT rowid
-    FROM user_foods
-    WHERE username = ? AND name = ?
-    LIMIT 1
-)
-"""
+    query = "DELETE FROM user_foods WHERE username = ? AND name = ? LIMIT 1"
     params = (user, foodName)
     c.execute(query, params)
     db.commit()
     db.close()
     return True
-'''
 
 def addExer(name, user, ids):
     db = get_db()

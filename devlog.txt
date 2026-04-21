@@ -95,3 +95,9 @@ alvinS -- 2026-04-20 20:45
     - Moved search to explore
     - Slight change to profile
     - Remove pycache, user database, and prints
+
+naomiK -- 2026-04-21 05:00
+* WORKING ON PROFILE/HOME
+    - Fixed/finished profile
+    - Mostly finished personalize
+    - Fixed issue with deleting food

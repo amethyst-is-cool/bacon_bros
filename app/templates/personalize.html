@@ -20,84 +20,110 @@
 
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
-  <span class="navbar-brand fw-bold">Lettuce Relax</span>
-  <div class="ms-auto d-flex gap-2">
-    <form action="/" method="POST"><input class="btn btn-outline-primary" type="submit" value="HOME"></form>
-    <form action="/profile" method="POST"><input class="btn btn-outline-primary" type="submit" value="PROFILE"></form>
-    <form action="/explore" method="POST"><input class="btn btn-outline-primary" type="submit" value="EXPLORE"></form>
-    <form action="/personalize" method="POST"><input class="btn btn-outline-primary" type="submit" value="PERSONALIZE"></form>
-    <form action="/logout" method="POST"><input class="btn btn-outline-danger" type="submit" value="LOG OUT"></form>
-  </div>
-</nav>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
+    <span class="navbar-brand fw-bold">Lettuce Relax</span>
+    <div class="ms-auto d-flex gap-2">
+      <form action="/" method="POST"><input class="btn btn-outline-primary" type="submit" value="HOME"></form>
+      <form action="/profile" method="POST"><input class="btn btn-outline-primary" type="submit" value="PROFILE"></form>
+      <form action="/explore" method="POST"><input class="btn btn-outline-primary" type="submit" value="EXPLORE"></form>
+      <form action="/personalize" method="POST"><input class="btn btn-outline-primary" type="submit" value="PERSONALIZE"></form>
+      <form action="/logout" method="POST"><input class="btn btn-outline-danger" type="submit" value="LOG OUT"></form>
+    </div>
+  </nav>
 
-<script>
-    if (window.history.replaceState) {
-        window.history.replaceState(null, null, window.location.href);
-    }
+  <script>
+      if (window.history.replaceState) {
+          window.history.replaceState(null, null, window.location.href);
+      }
   </script>
 
-<div class="container mt-5">
+  <h1 class="text-center">Personalize Your Workouts</h1>
+  <p class="text-center">Customize your diet and exercise plan based on your preferences.</p>
 
-  <div class="text-center mb-5">
-    <h1 class="fw-bold">Personalize Your Workouts</h1>
-    <p class="text-muted">Customize your diet and exercise plan based on your preferences.</p>
+  <!-- task: shrink font of first parts and dim out non-number words -->
+  <!-- this is first grid part thing -->
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center">
+          <div class="card-body">
+            <h4 class="text-muted">Total Calories Consumed Today</h4>
+            <h4 class="fw-bold">{{total}}</h4>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center">
+          <div class="card-body">
+            <h4 class="text-muted">TDEE (calories burned daily without workout)</h4>
+            <h4 class="fw-bold">{{tdee}}</h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center">
+          <div class="card-body">
+            <h4 class="text-muted">Calories Burned from Workout</h4>
+            <h4 class="fw-bold">{{workout}}</h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center">
+          <div class="card-body">
+            <h4 class="text-muted">Total Calories Burned</h4>
+            <h4 class="fw-bold">{{workout + tdee}}</h4>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center">
+          <div class="card-body">
+            <h4 class="text-muted">Today's Deficit</h4>
+            <h4 class="fw-bold">{{tdee + workout - total}}</h4>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center">
+          <div class="card-body">
+            <h4 class="text-muted">Target Daily Deficit</h4>
+            <h4 class="fw-bold">{{500 * loss[0][0]}}</h4>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
 
 
-    <h3 class="fw-bold mb-3">Total Calories Consumed Today: {{total}}</h3>
-    <br>
-    <h3 class="fw-bold mb-3">TDEE (calories burned daily based on activity level without workout): {{tdee}}</h3>
-    <br>
-    <h3 class="fw-bold mb-3">Calories Burned from Workout: {{workout}}</h3>
-    <br>
-    <h3 class="fw-bold mb-3">Total Calories Burned: {{workout + tdee}}</h3>
-    <br>
-    <h3 class="fw-bold mb-3">Today's Deficit: {{tdee + workout - total}}</h3>
-    <br>
-    <h3 class="fw-bold mb-3">Target Daily Deficit: {{500 * loss[0][0]}}</h3>
+  <div class="container mt-5">
+    <div class="row">
 
-  
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <div class="card-body text-center">
+            <h4 class="text-muted">This Week I'd Like to Lose...</h4>
+            <h4 class="fw-bold">{{loss[0][0]}}</h4>
+            <button class="btn btn-primary w-100 mt-2" onclick="addP(this)" data-value="0.5">
+              1/2 Pound
+            </button>
 
-  <div class="row g-4">
-
-    <div class="col-md-6">
-      <div class="card shadow-sm h-100">
-        <div class="card-body">
-
-    
-
-    <h3 class="fw-bold mb-3">I Want to Lose (this week)...{{loss[0][0]}} pounds</h3>
-      <button class="btn btn-primary w-100"  onclick="addP(this)" data-value="0.5" >1/2 Pound</button>
-      <br><br>
-      <button class="btn btn-primary w-100"  onclick="addP(this)" data-value="1" >1 Pound</button>
-      <br><br>
-      <button class="btn btn-primary w-100"  onclick="addP(this)" data-value="2" >2 Pounds</button>
-
-      </div>
-      </div>
-      </div>
-  </div>
-  
-
-
-
-
-  <div class="row g-4">
-
-    <div class="col-md-6">
-      <div class="card shadow-sm h-100">
-        <div class="card-body">
-
-          <h3 class="fw-bold mb-3">Your Meals Today</h3>
-
-          <ul class="list-group">
-            {% for given_food in food %}
-            <li class="list-group-item d-flex justify-content-between align-items-start">
-              {{given_food[0]}}
-
-            <!--
+            <button class="btn btn-primary w-100 mt-2" onclick="addP(this)" data-value="1">
+              1 Pound
+            </button>
+            <button class="btn btn-primary w-100 mt-2" onclick="addP(this)" data-value="2">
+              2 Pounds
+            </button>
+        </div>
+    </div>
+        <div class="card mb-4">
+          <div class="card-body">
+            <h4 class="text-muted">Your Selected Meals for Today:</h4>
+           <!--
               
               <div>
                 <p class="mb-1"><strong>{{ given_food[0] }}</strong></p>
@@ -114,43 +140,28 @@
 
             
           -->
-              </li>
+            <ul class="list-group mb-3">
+              {% for given_food in food %}
+                <li class="list-group-item">{{given_food[0]}}</li>
               {% endfor %}
             </ul>
 
-          <form action="/profile" method="POST" class="mt-3">
-            <input class="btn btn-primary w-100" type="submit" value="ADD MORE">
-          </form>
-
+            <form action="/profile" method="POST">
+              <input class="btn btn-primary w-100" type="submit" value="ADD MORE">
+            </form>
+          </div>
         </div>
-      </div>
-    </div>
 
+        <!-- Workouts Section -->
+        <div class="card mb-4">
+          <div class="card-body">
+            <h4 class="text-muted">Your Preferred Workouts:</h4>
 
-
-    <canvas id="exes"></canvas>
-
-    <script>
-      const xcer = {{ x | tojson }};
-    </script>
-
-    <script src="/static/js/chart2.js"></script>
-
-
-
-
-    <div class="col-md-6">
-      <div class="card shadow-sm h-100">
-        <div class="card-body">
-
-          <h3 class="fw-bold mb-3">Your Preferred Workouts</h3>
-
-          <ul class="list-group">
-            {% for given_exercise in exercise %}
-            <li class="list-group-item d-flex justify-content-between align-items-start">
-              {{given_exercise}} 
-              
-            </li>
+            <ul class="list-group mb-3">
+              {% for given_exercise in exercise %}
+                <li class="list-group-item">{{given_exercise}}</li>
+              {% endfor %}
+            </ul>
               <!---
               <div>
                 <p class="mb-1"><strong>{{ given_exercise[9] }}</strong></p>
@@ -168,21 +179,34 @@
                 </button>
               </form>
               -->
-            
-            {% endfor %}
-          </ul>
+            <form action="/profile" method="POST">
+              <input class="btn btn-primary w-100" type="submit" value="ADD MORE">
+            </form>
+          </div>
+        </div>
 
-          <form action="/profile" method="POST" class="mt-3">
-            <input class="btn btn-primary w-100" type="submit" value="ADD MORE">
-          </form>
+      </div>
 
+      <!-- RIGHT SIDE (2/3 width) -->
+      <div class="col-md-8">
+        <div class="card h-100">
+          <div class="card-body">
+
+            <h4 class="mb-3">Workout Map</h4>
+
+            <canvas id="exes" style="width: 100%; height: 400px;"></canvas>
+
+          </div>
         </div>
       </div>
-    </div>
 
+    </div>
   </div>
 
-</div>
+  <script>
+    const xcer = {{ x | tojson }};
+  </script>
+  <script src="/static/js/chart2.js"></script>
 
 </body>
 </html>

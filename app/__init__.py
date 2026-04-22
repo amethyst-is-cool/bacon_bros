@@ -10,7 +10,7 @@ app.secret_key = 'wegjedfoigshseiudf'
 
 # SQLite
 
-DB_FILE = "data.db"
+DB_FILE = "../data.db"
 
 def get_db():
     conn = sqlite3.connect(DB_FILE)

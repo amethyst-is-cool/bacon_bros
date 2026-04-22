@@ -105,3 +105,11 @@ naomiK -- 2026-04-21 05:00
 naomiK -- 2026-04-21 21:00
 * WORKING ON PERSONALIZE
     - Fnished personalize
+
+NOTABLE DESIGN REVISIONS:
+------------------------------------
+====================================
+veronikad7 -- 2026-04-22 1:00
+- finished recording video
+- removed two statistics displayed in personalize due to lack of purpose
+- discarded one/two extra graphs that should have compared previously mentioned data due to lack of time

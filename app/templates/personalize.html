@@ -61,22 +61,8 @@
           </div>
         </div>
       </div>
-      <div class="col-md-4 mb-4">
-        <div class="card h-100 text-center">
-          <div class="card-body">
-            <h4 class="text-muted">Calories Burned from Workout</h4>
-            <h4 class="fw-bold">{{workout}}</h4>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4 mb-4">
-        <div class="card h-100 text-center">
-          <div class="card-body">
-            <h4 class="text-muted">Total Calories Burned</h4>
-            <h4 class="fw-bold">{{workout + tdee}}</h4>
-          </div>
-        </div>
-      </div>
+  
+   
 
       <div class="col-md-4 mb-4">
         <div class="card h-100 text-center">
@@ -123,26 +109,10 @@
         <div class="card mb-4">
           <div class="card-body">
             <h4 class="text-muted">Your Selected Meals for Today:</h4>
-           <!--
-              
-              <div>
-                <p class="mb-1"><strong>{{ given_food[0] }}</strong></p>
-                <small>Calories: {{ given_food[1] }}</small><br>
-                <small>Protein: {{ given_food[4] }}</small>
-              </div>
-
-              <form method="POST" action="/personalize">
-                <input type="hidden" name="food_name" value="{{ given_food[0] }}">
-                <button class="btn btn-sm btn-danger" type="submit" name="action" value="remove_food">
-                  Remove
-                </button>
-              </form>
-
-            
-          -->
+          
             <ul class="list-group mb-3">
-              {% for given_food in food %}
-                <li class="list-group-item">{{given_food[0]}}</li>
+              {% for f in food %}
+                <li class="list-group-item"> {{f[0]}} </li>
               {% endfor %}
             </ul>
 
@@ -162,23 +132,7 @@
                 <li class="list-group-item">{{given_exercise}}</li>
               {% endfor %}
             </ul>
-              <!---
-              <div>
-                <p class="mb-1"><strong>{{ given_exercise[9] }}</strong></p>
-                <small>Workout: {{ given_exercise[7] }}</small><br>
-                <small>Sets: {{ given_exercise[10] }}</small><br>
-                <small>Reps: {{ given_exercise[11] }}</small><br>
-                <small>Calories Burned: {{ given_exercise[13] }}</small><br>
-                <small>Muscle Group: {{ given_exercise[14] }}</small>
-              </div>
-
-              <form method="POST" action="/personalize">
-                <input type="hidden" name="exercise_name" value="{{ given_exercise[9] }}">
-                <button class="btn btn-sm btn-danger" type="submit" name="action" value="remove_exercise">
-                  Remove
-                </button>
-              </form>
-              -->
+             
             <form action="/profile" method="POST">
               <input class="btn btn-primary w-100" type="submit" value="ADD MORE">
             </form>

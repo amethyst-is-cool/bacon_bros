@@ -33,3 +33,14 @@ Using the provided, locally hosted link, access the website. To deactivate the v
 
 #### Alternatively:
 Visit our live site at [http://143.198.5.43/](http://143.198.5.43/)
+
+### FEATURE SPOTLIGHT
+* make sure to fill in bio to see suggested workouts!
+* cool bubble graph in personalize
+* see nutrient breakdown of ur foods in pie chart
+* fill in bio to see stats in personalize
+
+### KNOWN BUGS/ISSUES
+* repeated workout suggestion in profile
+* holes in some data
+* food serving is in 100g (inconvenient)

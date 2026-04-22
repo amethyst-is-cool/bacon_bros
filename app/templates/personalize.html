@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="/static/style.css">
   <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
   <script src="/static/js/person.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
@@ -49,9 +50,13 @@
     <br>
     <h3 class="fw-bold mb-3">TDEE (calories burned daily based on activity level without workout): {{tdee}}</h3>
     <br>
-    <h3 class="fw-bold mb-3">Deficit: {{tdee - total}}</h3>
+    <h3 class="fw-bold mb-3">Calories Burned from Workout: {{workout}}</h3>
     <br>
-    <h3 class="fw-bold mb-3">Target Deficit: {{500 * loss[0][0]}}</h3>
+    <h3 class="fw-bold mb-3">Total Calories Burned: {{workout + tdee}}</h3>
+    <br>
+    <h3 class="fw-bold mb-3">Today's Deficit: {{tdee + workout - total}}</h3>
+    <br>
+    <h3 class="fw-bold mb-3">Target Daily Deficit: {{500 * loss[0][0]}}</h3>
 
   
 
@@ -64,6 +69,8 @@
     
 
     <h3 class="fw-bold mb-3">I Want to Lose (this week)...{{loss[0][0]}} pounds</h3>
+      <button class="btn btn-primary w-100"  onclick="addP(this)" data-value="0.5" >1/2 Pound</button>
+      <br><br>
       <button class="btn btn-primary w-100"  onclick="addP(this)" data-value="1" >1 Pound</button>
       <br><br>
       <button class="btn btn-primary w-100"  onclick="addP(this)" data-value="2" >2 Pounds</button>
@@ -83,7 +90,7 @@
       <div class="card shadow-sm h-100">
         <div class="card-body">
 
-          <h3 class="fw-bold mb-3">Your Preferred Foods</h3>
+          <h3 class="fw-bold mb-3">Your Meals Today</h3>
 
           <ul class="list-group">
             {% for given_food in food %}
@@ -118,6 +125,19 @@
         </div>
       </div>
     </div>
+
+
+
+    <canvas id="exes"></canvas>
+
+    <script>
+      const xcer = {{ x | tojson }};
+    </script>
+
+    <script src="/static/js/chart2.js"></script>
+
+
+
 
     <div class="col-md-6">
       <div class="card shadow-sm h-100">

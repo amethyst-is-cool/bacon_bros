@@ -32,7 +32,8 @@ CREATE TABLE IF NOT EXISTS users (
     height INT,
     sex TEXT,
     activity TEXT,
-    loss INT
+    loss REAL,
+    burned REAL
 )
 """)
 
@@ -122,7 +123,7 @@ def register():
             db = sqlite3.connect(DB_FILE)
             c = db.cursor()
             c.execute(
-                "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 (
                     request.form["username"],
                     request.form["password"],
@@ -131,6 +132,7 @@ def register():
                     0,
                     "",
                     "",
+                    0,
                     0
                 )
             )
@@ -338,7 +340,9 @@ def personalize():
     height = fetch("users", "username = ?", "height", (session["username"],))[0][0]
     weight = fetch("users", "username = ?", "weight", (session["username"],))[0][0]
     act = fetch("users", "username = ?", "activity", (session["username"],))[0][0]
+    burned = fetch("users", "username = ?", "burned", (session["username"],))[0][0]
 
+    values = nutDist(session["username"])
 
     food = fetch("user_foods", "username = ?", "name", (session["username"],))
     exercises = fetch("user_exercises", "username = ?", "name, session_duration, calories_burned", (session["username"],))
@@ -347,14 +351,7 @@ def personalize():
     for i in range(len(exercises)):
         exercise += [exercises[i][0]]
 
-    perMin = []
-    for i in range(len(exercises)):
-        perMin += [((exercises[i][2]) / ((exercises[i][1]) * 60))]
-
-    for i in range(len(exercise)):
-        exercise[i] = exercise[i] + " " + str(round(perMin[i], 2)) + " cal/min"
     
-    values = nutDist(session["username"])
 
     if len(values) > 0:
         total = values[0]
@@ -370,63 +367,17 @@ def personalize():
         tdee = 0
 
     loss = fetch("users", "username = ?", "loss", (session["username"],))
+
+    x = eStats(session["username"])
     
     if request.method == 'POST':
         if 'pound' in request.form:
             addLoss(request.form["pound"], session["username"])
 
-    '''
-    #have to tap into db again to get the user preferences tables to be able to rmv some
-    db = get_db()
-    c = db.cursor()
-
-    user = session["username"]
-
-    #pulls list of food
-    food = c.execute("""
-        SELECT name, calories, fat, sugar, protein, fiber, cholesterol
-        FROM user_foods
-        WHERE username = ?
-    """, (user,)).fetchall()
+    
 
     
-    #temporary pull of exers
-    exer = c.execute("""
-        SELECT username, age, gender, weight, height, session_duration, calories_burned, workout_type, BMI, name, sets, reps, benefit, burns_calories, target_muscle_group, workout
-        FROM user_exercises
-        WHERE username = ?
-    """, (user,)).fetchall()
-
-        #if the button is pressed to remove that food from list
-    if request.method == 'POST':
-        if request.form.get("action") == "remove_food":
-            food_name = request.form.get("food_name")
-
-            c.execute("""
-                DELETE FROM user_foods
-                 WHERE username = ? AND name = ?
-            """, (user, food_name))
-
-                db.commit()
-                db.close()
-                return redirect("/personalize")
-
-    if request.method == 'POST':
-        if request.form.get("action") == "remove_exercise":
-            exercise_name = request.form.get("exercise_name")
-
-            c.execute("""
-                DELETE FROM user_exercises
-                WHERE username = ? AND name = ?
-            """, (user, exercise_name))
-
-            db.commit()
-            db.close()
-            return redirect("/personalize")
-    '''
-
-    
-    return render_template("personalize.html", food = food, exercise = exercise, total = total, tdee = tdee, loss = loss)
+    return render_template("personalize.html", food = food, exercise = exercise, total = total, tdee = tdee, loss = loss, workout = burned, x = x)
 
 
 @app.route("/results", methods=["GET","POST"])
@@ -446,7 +397,7 @@ def logout():
 def addLoss(pound, user):
     db = get_db()
     c = db.cursor()
-    pound = int(pound)
+    pound = float(pound)
     query = "UPDATE users SET loss = ? WHERE username = ?"
     params = (pound, user)
     c.execute(query, params)
@@ -619,6 +570,20 @@ def statC(age, weight, height, sex, act):
     return l
 
 
+def eStats(user):
+    wrks = fetch("user_exercises", "username = ?", "name, session_duration, calories_burned, reps, sets", (user,))
+    x = []
+    for w in wrks:
+        name = w[0]
+        dur = w[1] * 60
+        cals = w[2]
+        reps = (w[3] * w[4])
+        x.append({
+            "name": name + " " + str(round(cals/dur)) + " cals/min",
+            "reps": reps / dur,
+            "cals": cals / dur
+        })
+    return x
 
 # Flask
 if __name__=='__main__':

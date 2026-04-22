@@ -101,3 +101,7 @@ naomiK -- 2026-04-21 05:00
     - Fixed/finished profile
     - Mostly finished personalize
     - Fixed issue with deleting food
+
+naomiK -- 2026-04-21 21:00
+* WORKING ON PERSONALIZE
+    - Fnished personalize

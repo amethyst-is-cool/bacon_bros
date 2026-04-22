@@ -32,4 +32,4 @@ In the terminal, access the project root directory ('cd app') and run the follow
 Using the provided, locally hosted link, access the website. To deactivate the virtual environment, type `deactivate`.
 
 #### Alternatively:
-Visit our live site at [https://157.245.125.98/](https://157.245.125.98/)
+Visit our live site at [http://143.198.5.43/](http://143.198.5.43/)
